@@ -600,15 +600,15 @@ public class SecurityUtils {
     /**
      * Extensão utilizada para armazenar chaves privadas em ficheiros
      */
-    public static String KEY_EXTENSION_FILE = "key";
+    public static String KEY_EXTENSION_FILE = "sim";
     /**
      * Extensão utilizada para armazenar chaves privadas em ficheiros
      */
-    public static String PRIVATE_KEY_EXTENSION_FILE = "privkey";
+    public static String PRIVATE_KEY_EXTENSION_FILE = "priv";
     /**
      * Extensão utilizada para armazenar chaves publicas em ficheiros
      */
-    public static String PUBLIC_KEY_EXTENSION_FILE = "pubkey";
+    public static String PUBLIC_KEY_EXTENSION_FILE = "pub";
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     private static final long serialVersionUID = 202208301028L;

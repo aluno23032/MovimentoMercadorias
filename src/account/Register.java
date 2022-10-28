@@ -205,12 +205,12 @@ public class Register extends javax.swing.JFrame {
                 SecurityUtils.saveKey(kp.getPublic(), username + ".pub");
                 SecurityUtils.saveKey(kp.getPrivate(), username + ".priv");
                 SecurityUtils.saveKey(ks, username + ".sim");
-                byte[] data = Files.readAllBytes(Paths.get(username + ".privkey"));
+                byte[] data = Files.readAllBytes(Paths.get(username + ".priv"));
                 data = SecurityUtils.encrypt(data, password);
-                Files.write(Paths.get(username + ".privkey"), data);
-                data = Files.readAllBytes(Paths.get(username + ".key"));
+                Files.write(Paths.get(username + ".priv"), data);
+                data = Files.readAllBytes(Paths.get(username + ".sim"));
                 data = SecurityUtils.encrypt(data, ks);
-                Files.write(Paths.get(username + ".key"), data);
+                Files.write(Paths.get(username + ".sim"), data);
             } catch (Exception ex) {
                 Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
             }

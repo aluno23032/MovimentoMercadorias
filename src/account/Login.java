@@ -4,6 +4,8 @@
  */
 package account;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Key;
@@ -20,7 +22,7 @@ import utils.SecurityUtils;
  */
 public class Login extends javax.swing.JFrame {
 
-    String username;
+    public String username;
     String password;
     byte[] publickey;
     byte[] privatekey;
@@ -170,6 +172,7 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
@@ -177,16 +180,18 @@ public class Login extends javax.swing.JFrame {
         username = jTextField1.getText();
         password = jTextField2.getText();
         try {
-            if (Files.exists(Paths.get(username + ".privkey"))) {
-                byte[] data = Files.readAllBytes(Paths.get(username + ".privkey"));
+            if (Files.exists(Paths.get(username + ".priv"))) {
+                byte[] data = Files.readAllBytes(Paths.get(username + ".priv"));
                 try {
                     privatekey = SecurityUtils.decrypt(data, password);
                 } catch (Exception exception) {
                     JOptionPane.showMessageDialog(new JFrame(), "Invalid login attempt.", "Warning",
                     JOptionPane.WARNING_MESSAGE);
                 }
-                publickey = Files.readAllBytes(Paths.get(username + ".pubkey"));
-                simetrickey = Files.readAllBytes(Paths.get(username + ".key"));
+                publickey = Files.readAllBytes(Paths.get(username + ".pub"));
+                simetrickey = Files.readAllBytes(Paths.get(username + ".sim"));
+                this.dispose();
+                new GUI().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "There is no user with this username.", "Warning",
                     JOptionPane.WARNING_MESSAGE);
@@ -194,6 +199,7 @@ public class Login extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_jButton2MouseClicked
 
     /**
