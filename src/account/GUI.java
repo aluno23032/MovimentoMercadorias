@@ -7,8 +7,10 @@ package account;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Key;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.SecurityUtils;
 
 /**
  *
@@ -16,11 +18,14 @@ import java.util.logging.Logger;
  */
 public class GUI extends javax.swing.JFrame {
 
+    String username;
+
     /**
      * Creates new form GUI
      */
-    public GUI() {
+    public GUI(String username) {
         initComponents();
+        this.username = username;
     }
 
     /**
@@ -104,15 +109,29 @@ public class GUI extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             // TODO add your handling code here:
-            byte[] img = Files.readAllBytes(Paths.get("index.jpeg"));
-            byte[] chave = Files.readAllBytes(Paths.get("index.jpeg"));
-        } catch (IOException ex) {
+            byte[] img = Files.readAllBytes(Paths.get("index.jpg"));
+            byte[] chavesimfile = Files.readAllBytes(Paths.get(username + ".sim"));
+            Key chavepriv = SecurityUtils.loadPrivateKey(username + ".priv");
+            byte[] chavesim = SecurityUtils.decrypt(chavesimfile, chavepriv);
+            Files.write(Paths.get(username + "simd"), chavesim);
+            Key chaveS = SecurityUtils.loadAESKey(username + ".simd");
+            byte[] data = SecurityUtils.encrypt(img, chaveS);
+            Files.write(Paths.get("index.crypt"), data);
+        } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        try {
+            byte[] crypted = Files.readAllBytes(Paths.get("index.crypt"));
+            Key key = SecurityUtils.loadKey(username + ".key");
+            byte[] decrypted = SecurityUtils.decrypt(crypted, key);
+            Files.write(Paths.get("index.jpg"), decrypted);
+        } catch (Exception ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -153,7 +172,7 @@ public class GUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUI().setVisible(true);
+                new GUI("teste").setVisible(true);
             }
         });
     }

@@ -209,8 +209,10 @@ public class Register extends javax.swing.JFrame {
                 data = SecurityUtils.encrypt(data, password);
                 Files.write(Paths.get(username + ".priv"), data);
                 data = Files.readAllBytes(Paths.get(username + ".sim"));
-                data = SecurityUtils.encrypt(data, ks);
+                data = SecurityUtils.encrypt(data, kp.getPublic());
                 Files.write(Paths.get(username + ".sim"), data);
+                this.dispose();
+                new Login().setVisible(true);
             } catch (Exception ex) {
                 Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
             }
