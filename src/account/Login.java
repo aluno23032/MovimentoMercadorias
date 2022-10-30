@@ -24,10 +24,10 @@ public class Login extends javax.swing.JFrame {
 
     String username;
     String password;
-    byte[] publickey;
-    byte[] privatekey;
-    byte[] simetrickey;
-    
+    Key publickey;
+    Key privatekey;
+    Key simetrickey;
+
     /**
      * Creates new form Register
      */
@@ -184,7 +184,7 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
@@ -195,23 +195,32 @@ public class Login extends javax.swing.JFrame {
             if (Files.exists(Paths.get(username + ".priv"))) {
                 byte[] data = Files.readAllBytes(Paths.get(username + ".priv"));
                 try {
-                    privatekey = SecurityUtils.decrypt(data, password);
+                    SecurityUtils.decrypt(data, password);
+                    publickey = SecurityUtils.loadPublicKey(username + ".pub");
+                    data = Files.readAllBytes(Paths.get(username + ".priv"));
+                    data = SecurityUtils.decrypt(data, password);
+                    Files.write(Paths.get("temp.priv"), data);
+                    privatekey = SecurityUtils.loadPrivateKey("temp.priv");
+                    Files.deleteIfExists(Paths.get("temp.priv"));
+                    data = Files.readAllBytes(Paths.get(username + ".sim"));
+                    data = SecurityUtils.decrypt(data, privatekey);
+                    Files.write(Paths.get("temp.sim"), data);
+                    simetrickey = SecurityUtils.loadAESKey("temp.sim");
+                    Files.deleteIfExists(Paths.get("temp.sim"));
+                    this.dispose();
+                    new GUI(publickey, privatekey, simetrickey).setVisible(true);
                 } catch (Exception exception) {
                     JOptionPane.showMessageDialog(new JFrame(), "Invalid login attempt.", "Warning",
-                    JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.WARNING_MESSAGE);
                 }
-                publickey = Files.readAllBytes(Paths.get(username + ".pub"));
-                simetrickey = Files.readAllBytes(Paths.get(username + ".sim"));
-                this.dispose();
-                new GUI(username).setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "There is no user with this username.", "Warning",
-                    JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
@@ -251,7 +260,7 @@ public class Login extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

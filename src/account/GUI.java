@@ -4,7 +4,6 @@
  */
 package account;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Key;
@@ -18,14 +17,18 @@ import utils.SecurityUtils;
  */
 public class GUI extends javax.swing.JFrame {
 
-    String username;
+    Key publickey;
+    Key privatekey;
+    Key simetrickey;
 
     /**
      * Creates new form GUI
      */
-    public GUI(String username) {
+    public GUI(Key publickey, Key privatekey, Key simetrickey) {
+        this.publickey = publickey;
+        this.privatekey = privatekey;
+        this.simetrickey = simetrickey;
         initComponents();
-        this.username = username;
     }
 
     /**
@@ -109,14 +112,11 @@ public class GUI extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             // TODO add your handling code here:
+            //Ler imagem
             byte[] img = Files.readAllBytes(Paths.get("index.jpg"));
-            byte[] chavesimfile = Files.readAllBytes(Paths.get(username + ".sim"));
-            Key chavepriv = SecurityUtils.loadPrivateKey(username + ".priv");
-            byte[] chavesim = SecurityUtils.decrypt(chavesimfile, chavepriv);
-            Files.write(Paths.get(username + "simd"), chavesim);
-            Key chaveS = SecurityUtils.loadAESKey(username + ".simd");
-            byte[] data = SecurityUtils.encrypt(img, chaveS);
-            Files.write(Paths.get("index.crypt"), data);
+            //Encriptar imagem com chave simétrica
+            byte[] crypt = SecurityUtils.encrypt(img, simetrickey);
+            Files.write(Paths.get("index.crypt"), crypt);
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -126,8 +126,7 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             byte[] crypted = Files.readAllBytes(Paths.get("index.crypt"));
-            Key key = SecurityUtils.loadKey(username + ".key");
-            byte[] decrypted = SecurityUtils.decrypt(crypted, key);
+            byte[] decrypted = SecurityUtils.decrypt(crypted, simetrickey);
             Files.write(Paths.get("index.jpg"), decrypted);
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -169,12 +168,6 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI("teste").setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

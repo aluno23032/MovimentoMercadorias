@@ -200,17 +200,18 @@ public class Register extends javax.swing.JFrame {
         } else {
             password = jTextField2.getText();
             try {
+                //Gerar chaves
                 KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
                 Key ks = SecurityUtils.generateAESKey(256);
+                //Guardar chave pública
                 SecurityUtils.saveKey(kp.getPublic(), username + ".pub");
-                SecurityUtils.saveKey(kp.getPrivate(), username + ".priv");
-                SecurityUtils.saveKey(ks, username + ".sim");
-                byte[] data = Files.readAllBytes(Paths.get(username + ".priv"));
-                data = SecurityUtils.encrypt(data, password);
+                //Encriptar e guardar chave privada
+                byte[] data = SecurityUtils.encrypt(kp.getPrivate().getEncoded(), password);
                 Files.write(Paths.get(username + ".priv"), data);
-                data = Files.readAllBytes(Paths.get(username + ".sim"));
-                data = SecurityUtils.encrypt(data, kp.getPublic());
+                //Encriptar e guardar chave simétrica
+                data = SecurityUtils.encrypt(ks.getEncoded(), kp.getPublic());
                 Files.write(Paths.get(username + ".sim"), data);
+                //Fechar janela e abrir janela de login
                 this.dispose();
                 new Login().setVisible(true);
             } catch (Exception ex) {
