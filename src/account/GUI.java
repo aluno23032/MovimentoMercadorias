@@ -7,8 +7,12 @@ package account;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Key;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import utils.SecurityUtils;
 
 /**
@@ -135,10 +139,31 @@ public class GUI extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        try {
+            byte[] file = Files.readAllBytes(Paths.get("index.jpg"));
+            byte[] data = SecurityUtils.sign(file, (PrivateKey) privatekey);
+            Files.write(Paths.get("index.sign"), data);
+        } catch (Exception ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        try {
+            byte[] file = Files.readAllBytes(Paths.get("index.jpg"));
+            byte[] sign = Files.readAllBytes(Paths.get("index.sign"));
+            if(SecurityUtils.verifySign(file, sign, (PublicKey) publickey)) {
+                JOptionPane.showMessageDialog(new JFrame(), "Signature confirmed.", "Warning",
+                            JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "Invalid signature.", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
