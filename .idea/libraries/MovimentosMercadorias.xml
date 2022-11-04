@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MovimentosMercadorias">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/MovimentosMercadorias.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
