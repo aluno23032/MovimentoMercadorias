@@ -30,6 +30,16 @@ public class Ledger {
         }
         return txt.toString();
     }
+    
+    public String toGUIString() {
+        StringBuilder txt = new StringBuilder();
+        txt.append("<html>");
+        for (Movimento movimento : history) {
+            txt.append(movimento.toString()).append("<br>");
+        }
+        txt.append("</html>");
+        return txt.toString();
+    }
 
     public void add(Movimento m) {
         for (Movimento movimento : history) {
@@ -52,7 +62,26 @@ public class Ledger {
         }
         return current;
     }
+    
+    public List<String> getUsers() {
+        List<String> l = new ArrayList<>();
+        String user;
+        for (Movimento movimento : history) {
+            user = movimento.getTo();
+            if (!l.contains(user)) {
+                l.add(user);
+            }
+        }
+        return l;
+        
+    }
 
+    public List<Movimento> getHistory() {
+        return history;
+    }
+
+    public List<String> getUserEncomendas
+    
     public void saveFile(String fileName) throws FileNotFoundException {
         try ( PrintStream out = new PrintStream(new File(fileName))) {
             out.println(toString());
