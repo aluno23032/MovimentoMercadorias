@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -80,7 +81,30 @@ public class Ledger {
         return history;
     }
 
-    public List<String> getUserEncomendas
+    public List<String> getUserEncomendas(String user) {
+        List<String> l = new ArrayList<>();
+        for (Movimento movimento : history) {
+            if (movimento.getTo().equals(user)) {
+                if (!l.isEmpty()) {
+                    boolean hasOld = false;
+                    for (String entry : l) {
+                        if (entry.contains("1")) {
+                            hasOld = true;
+                        }
+                    }
+                    if (hasOld == true) {
+                        l.removeIf(s -> s.contains("1"));
+                    }
+                    if (!movimento.isRecebido()) {
+                        l.add("Encomenda n. " + Integer.toString(movimento.getIdEncomenda()) + " : " + movimento.getCurrent());
+                    }
+                } else {
+                    l.add("Encomenda n. " + Integer.toString(movimento.getIdEncomenda()) + " : " + movimento.getCurrent());
+                }
+            }
+        }
+        return l;
+    }
     
     public void saveFile(String fileName) throws FileNotFoundException {
         try ( PrintStream out = new PrintStream(new File(fileName))) {
