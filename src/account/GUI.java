@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package account;
 
 import java.nio.file.Files;
@@ -17,8 +13,9 @@ import utils.SecurityUtils;
 
 /**
  *
- * @author Eduardo
+ * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
+
 public class GUI extends javax.swing.JFrame {
 
     Key publickey;
@@ -28,6 +25,7 @@ public class GUI extends javax.swing.JFrame {
     /**
      * Creates new form GUI
      */
+    
     public GUI(Key publickey, Key privatekey, Key simetrickey) {
         this.publickey = publickey;
         this.privatekey = privatekey;
@@ -44,38 +42,38 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btEncrypt = new javax.swing.JButton();
+        btDecrypt = new javax.swing.JButton();
+        btSign = new javax.swing.JButton();
+        btVerify = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Encrypt");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btEncrypt.setText("Encrypt");
+        btEncrypt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btEncryptActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Decrypt");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btDecrypt.setText("Decrypt");
+        btDecrypt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btDecryptActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Sign");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btSign.setText("Sign");
+        btSign.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btSignActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Verify");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btVerify.setText("Verify");
+        btVerify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btVerifyActionPerformed(evt);
             }
         });
 
@@ -87,13 +85,13 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btEncrypt, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btDecrypt, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btSign, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btVerify, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -101,70 +99,89 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btDecrypt, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                    .addComponent(btEncrypt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btVerify, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btSign, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btEncryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEncryptActionPerformed
         try {
-            // TODO add your handling code here:
-            //Ler imagem
+            
+            //Ler ficheiro
             byte[] img = Files.readAllBytes(Paths.get("index.jpg"));
-            //Encriptar imagem com chave simétrica
+            
+            //Encriptar ficheiro com chave simétrica
             byte[] crypt = SecurityUtils.encrypt(img, simetrickey);
+            
+            //Guardar ficheiro (.crypt)
             Files.write(Paths.get("index.crypt"), crypt);
+            
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btEncryptActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+    private void btDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDecryptActionPerformed
         try {
+            
+            //Ler ficheiro encriptado
             byte[] crypted = Files.readAllBytes(Paths.get("index.crypt"));
+            
+            //Decriptar ficheiro com chave simétrica
             byte[] decrypted = SecurityUtils.decrypt(crypted, simetrickey);
+            
+            //Guardar ficheiro (.jpg)
             Files.write(Paths.get("index.jpg"), decrypted);
+            
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btDecryptActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+    private void btSignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSignActionPerformed
         try {
+            
+            //Ler ficheiro
             byte[] file = Files.readAllBytes(Paths.get("index.jpg"));
+            
+            //Assinar ficheiro com a chave privada
             byte[] data = SecurityUtils.sign(file, (PrivateKey) privatekey);
+            
+            //Guardar ficheiro (.sign)
             Files.write(Paths.get("index.sign"), data);
+            
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btSignActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+    private void btVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btVerifyActionPerformed
         try {
+            
+            //Ler ficheiro
             byte[] file = Files.readAllBytes(Paths.get("index.jpg"));
+            
+            //Ler ficheiro assinado
             byte[] sign = Files.readAllBytes(Paths.get("index.sign"));
+            
+            //Verificar assinatura
             if(SecurityUtils.verifySign(file, sign, (PublicKey) publickey)) {
-                JOptionPane.showMessageDialog(new JFrame(), "Signature confirmed.", "Warning",
-                            JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(new JFrame(), "Valid Signature.", "Success",JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(new JFrame(), "Invalid signature.", "Warning",
-                            JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(new JFrame(), "Invalid Signature.", "Warning",JOptionPane.WARNING_MESSAGE);
             }
             
         } catch (Exception ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btVerifyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -196,9 +213,9 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btDecrypt;
+    private javax.swing.JButton btEncrypt;
+    private javax.swing.JButton btSign;
+    private javax.swing.JButton btVerify;
     // End of variables declaration//GEN-END:variables
 }
