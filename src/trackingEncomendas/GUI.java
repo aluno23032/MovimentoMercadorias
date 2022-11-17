@@ -4,6 +4,7 @@
  */
 package trackingEncomendas;
 
+import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import javax.swing.DefaultListModel;
@@ -16,13 +17,19 @@ import javax.swing.JOptionPane;
  */
 public class GUI extends javax.swing.JFrame {
 
+    Key publickey;
+    Key privatekey;
+    Key simetrickey;
     Ledger l = new Ledger();
     String user;
     
     /**
      * Creates new form GUI
      */
-    public GUI() {
+    public GUI(Key publickey, Key privatekey, Key simetrickey) {
+        this.publickey = publickey;
+        this.privatekey = privatekey;
+        this.simetrickey = simetrickey;
         initComponents();    
     }
 
@@ -319,12 +326,7 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI().setVisible(true);
-            }
-        });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

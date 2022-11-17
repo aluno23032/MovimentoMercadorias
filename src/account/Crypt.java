@@ -16,7 +16,7 @@ import utils.SecurityUtils;
  * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
 
-public class GUI extends javax.swing.JFrame {
+public class Crypt extends javax.swing.JFrame {
 
     Key publickey;
     Key privatekey;
@@ -26,7 +26,7 @@ public class GUI extends javax.swing.JFrame {
      * Creates new form GUI
      */
     
-    public GUI(Key publickey, Key privatekey, Key simetrickey) {
+    public Crypt(Key publickey, Key privatekey, Key simetrickey) {
         this.publickey = publickey;
         this.privatekey = privatekey;
         this.simetrickey = simetrickey;
@@ -124,7 +124,7 @@ public class GUI extends javax.swing.JFrame {
             Files.write(Paths.get("index.crypt"), crypt);
             
         } catch (Exception ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Crypt.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btEncryptActionPerformed
 
@@ -141,7 +141,7 @@ public class GUI extends javax.swing.JFrame {
             Files.write(Paths.get("index.jpg"), decrypted);
             
         } catch (Exception ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Crypt.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btDecryptActionPerformed
 
@@ -158,7 +158,7 @@ public class GUI extends javax.swing.JFrame {
             Files.write(Paths.get("index.sign"), data);
             
         } catch (Exception ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Crypt.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btSignActionPerformed
 
@@ -179,7 +179,7 @@ public class GUI extends javax.swing.JFrame {
             }
             
         } catch (Exception ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Crypt.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btVerifyActionPerformed
 
@@ -200,14 +200,15 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Crypt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Crypt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Crypt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Crypt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
     }
