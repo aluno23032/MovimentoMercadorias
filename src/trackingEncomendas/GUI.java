@@ -4,6 +4,7 @@
  */
 package trackingEncomendas;
 
+import account.Register;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -19,9 +20,9 @@ import utils.BlockChain;
 public class GUI extends javax.swing.JFrame {
 
     BlockChain bc = new BlockChain();
-    Key publickey;
+    /*Key publickey;
     Key privatekey;
-    Key simetrickey;
+    Key simetrickey;*/
     Ledger l = new Ledger();
     Ledger l2 = new Ledger();
     String user;
@@ -29,10 +30,10 @@ public class GUI extends javax.swing.JFrame {
     /**
      * Creates new form GUI
      */
-    public GUI(Key publickey, Key privatekey, Key simetrickey) {
-        this.publickey = publickey;
+    public GUI(/*Key publickey, Key privatekey, Key simetrickey*/) {
+        /*this.publickey = publickey;
         this.privatekey = privatekey;
-        this.simetrickey = simetrickey;
+        this.simetrickey = simetrickey;*/
         initComponents();    
     }
 
@@ -429,7 +430,11 @@ public class GUI extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new GUI().setVisible(true);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
