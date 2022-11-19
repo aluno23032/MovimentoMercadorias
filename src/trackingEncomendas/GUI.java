@@ -2,10 +2,12 @@ package trackingEncomendas;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import utils.BlockChain;
+import utils.MerkleTree;
 
 /**
  *
@@ -65,8 +67,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         painelBlockChain = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        areaTxTMovimentos = new javax.swing.JTextArea();
         btGeraBloco = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -74,6 +74,8 @@ public class GUI extends javax.swing.JFrame {
         areaTxTBlockChain = new javax.swing.JTextArea();
         btGuardarBloco = new javax.swing.JButton();
         btCarregarBloco = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        listaMovimentosTemp = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tracking Encomendas");
@@ -141,43 +143,46 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(btAtualizarEncomenda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, painelMovimentosLayout.createSequentialGroup()
                         .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(painelMovimentosLayout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtOrigem, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
+                        .addGap(6, 6, 6)
+                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(painelMovimentosLayout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(140, 140, 140)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(painelMovimentosLayout.createSequentialGroup()
+                                .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtLocalizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtLocalizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))))
                 .addContainerGap())
         );
         painelMovimentosLayout.setVerticalGroup(
             painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelMovimentosLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelMovimentosLayout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtLocalizacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(painelMovimentosLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelMovimentosLayout.createSequentialGroup()
                             .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel6))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelMovimentosLayout.createSequentialGroup()
                                 .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jLabel6))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btAtualizarEncomenda, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -214,14 +219,14 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(painelUtilizadoresLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(painelUtilizadoresLayout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
+                        .addComponent(jLabel1)
+                        .addGap(0, 134, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         painelUtilizadoresLayout.setVerticalGroup(
@@ -241,12 +246,12 @@ public class GUI extends javax.swing.JFrame {
         tbPanePrincipal.addTab("Utilizadores", painelUtilizadores);
         painelUtilizadores.getAccessibleContext().setAccessibleName("");
 
-        areaTxTMovimentos.setColumns(20);
-        areaTxTMovimentos.setRows(5);
-        jScrollPane4.setViewportView(areaTxTMovimentos);
-        areaTxTMovimentos.getAccessibleContext().setAccessibleName("");
-
         btGeraBloco.setText("Gerar Bloco");
+        btGeraBloco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btGeraBlocoActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Movimentos");
 
@@ -272,6 +277,13 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        listaMovimentosTemp.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane6.setViewportView(listaMovimentosTemp);
+
         javax.swing.GroupLayout painelBlockChainLayout = new javax.swing.GroupLayout(painelBlockChain);
         painelBlockChain.setLayout(painelBlockChainLayout);
         painelBlockChainLayout.setHorizontalGroup(
@@ -279,20 +291,20 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(painelBlockChainLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btGeraBloco, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                        .addComponent(jScrollPane6))
+                    .addComponent(jLabel8))
+                .addGap(18, 18, 18)
+                .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelBlockChainLayout.createSequentialGroup()
-                        .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                        .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel9)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(painelBlockChainLayout.createSequentialGroup()
-                        .addComponent(btGeraBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btGuardarBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
-                        .addComponent(btCarregarBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btGuardarBloco, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btCarregarBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane5))
                 .addContainerGap())
         );
         painelBlockChainLayout.setVerticalGroup(
@@ -301,13 +313,14 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelBlockChainLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(22, 22, 22)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE))
                     .addGroup(painelBlockChainLayout.createSequentialGroup()
-                        .addComponent(jLabel8)
+                        .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane4)))
+                        .addComponent(jScrollPane6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btGeraBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -357,12 +370,13 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_txtOrigemActionPerformed
 
     private void btAtualizarEncomendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualizarEncomendaActionPerformed
-        
-        Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
         try {
-            //adicionar movimento à ledger
+            Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
+            //adicionar movimento às ledger
             ledgerMov.add(m);
             ledgerBloco.add(m);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Introduza um nº. de encomenda válido.", "Warning",JOptionPane.WARNING_MESSAGE);
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(new JFrame(), "Essa encomenda ja foi entregue.", "Warning",JOptionPane.WARNING_MESSAGE);
         }
@@ -382,7 +396,8 @@ public class GUI extends javax.swing.JFrame {
         if( tbPanePrincipal.getSelectedComponent()== painelBlockChain){
             DefaultListModel model = new DefaultListModel();
             model.addAll(ledgerBloco.getHistory());
-            listUtilizadores.setModel(model); 
+            ledgerBloco.toString();
+            listaMovimentosTemp.setModel(model); 
         }
     }//GEN-LAST:event_tbPanePrincipalStateChanged
 
@@ -402,6 +417,17 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btCarregarBlocoActionPerformed
 
+    private void btGeraBlocoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGeraBlocoActionPerformed
+        // TODO add your handling code here:
+        String[] elements = ledgerBloco.toString().split("\\n");
+        MerkleTree<String> mt = new MerkleTree<>(elements);
+        bc.add(MerkleTree.byteArrayToHex(mt.getRoot()), 1);
+        areaTxTBlockChain.setText(bc.toString());
+        DefaultListModel listModel = (DefaultListModel) listaMovimentosTemp.getModel();
+        listModel.removeAllElements();
+        ledgerBloco.clearHistory();
+    }//GEN-LAST:event_btGeraBlocoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -414,27 +440,20 @@ public class GUI extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new GUI().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaTxTBlockChain;
-    private javax.swing.JTextArea areaTxTMovimentos;
     private javax.swing.JButton btAtualizarEncomenda;
     private javax.swing.JButton btCarregarBloco;
     private javax.swing.JButton btGeraBloco;
@@ -451,11 +470,12 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JList<String> listEncomendas;
     private javax.swing.JList<String> listMovimentos;
     private javax.swing.JList<String> listUtilizadores;
+    private javax.swing.JList<String> listaMovimentosTemp;
     private javax.swing.JPanel painelBlockChain;
     private javax.swing.JPanel painelMovimentos;
     private javax.swing.JPanel painelUtilizadores;

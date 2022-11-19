@@ -19,7 +19,6 @@ public class Ledger {
 
     public Ledger() {
         history = new ArrayList<>();
-        //history.add(new Movimento("José", "IKI Mobile", 1));
     }
 
     @Override
@@ -78,6 +77,10 @@ public class Ledger {
 
     public List<Movimento> getHistory() {
         return history;
+    }
+    
+    public void clearHistory() {
+        history = new ArrayList<>();
     }
 
     public List<String> getUserEncomendas(String user) {
