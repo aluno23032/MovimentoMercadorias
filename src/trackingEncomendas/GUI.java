@@ -1,13 +1,18 @@
 package trackingEncomendas;
 
+import java.io.IOException;
+import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import utils.BlockChain;
 import utils.MerkleTree;
+import utils.SecurityUtils;
 
 /**
  *
@@ -18,9 +23,9 @@ public class GUI extends javax.swing.JFrame {
 
     BlockChain bc = new BlockChain();
     
-    /*Key publickey;
+    Key publickey;
     Key privatekey;
-    Key simetrickey;*/
+    Key simetrickey;
     
     Ledger ledgerMov = new Ledger();
     Ledger ledgerBloco = new Ledger();
@@ -28,11 +33,14 @@ public class GUI extends javax.swing.JFrame {
     
     /**
      * Creates new form GUI
+     * @param publickey
+     * @param privatekey
+     * @param simetrickey
      */
-    public GUI(/*Key publickey, Key privatekey, Key simetrickey*/) {
-        /*this.publickey = publickey;
+    public GUI(Key publickey, Key privatekey, Key simetrickey) {
+        this.publickey = publickey;
         this.privatekey = privatekey;
-        this.simetrickey = simetrickey;*/
+        this.simetrickey = simetrickey;
         initComponents();    
     }
 
@@ -411,10 +419,30 @@ public class GUI extends javax.swing.JFrame {
 
     private void btGuardarBlocoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarBlocoActionPerformed
         // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                bc.save(fc.getSelectedFile().getAbsolutePath());
+                JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo",JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btGuardarBlocoActionPerformed
 
     private void btCarregarBlocoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCarregarBlocoActionPerformed
         // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                bc.load(fc.getSelectedFile().getAbsolutePath());
+                areaTxTBlockChain.setText(bc.toString());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btCarregarBlocoActionPerformed
 
     private void btGeraBlocoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGeraBlocoActionPerformed
@@ -448,7 +476,14 @@ public class GUI extends javax.swing.JFrame {
         //</editor-fold>
 
         java.awt.EventQueue.invokeLater(() -> {
-            new GUI().setVisible(true);
+            try {
+                new GUI(
+                        SecurityUtils.loadPublicKey("edu" + ".pub"),
+                        SecurityUtils.loadPublicKey("edu" + ".priv"),
+                        SecurityUtils.loadPublicKey("edu" + ".sim")).setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 

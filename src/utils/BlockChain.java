@@ -42,7 +42,7 @@ public class BlockChain implements Serializable {
     }
 
     public void save(String fileName) throws Exception {
-        try ( ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
+        try ( ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName + ".bc"))) {
             out.writeObject(chain);
         }
     }

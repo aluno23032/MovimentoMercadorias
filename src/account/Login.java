@@ -202,7 +202,7 @@ public class Login extends javax.swing.JFrame {
                     
                     //Fechar janela e abrir o GUI
                     this.dispose();
-                    new trackingEncomendas.GUI(/*publickey, privatekey, simetrickey*/).setVisible(true);
+                    new trackingEncomendas.GUI(publickey, privatekey, simetrickey).setVisible(true);
                 } catch (Exception exception) {
                     JOptionPane.showMessageDialog(new JFrame(), "Invalid login attempt.", "Warning",
                             JOptionPane.WARNING_MESSAGE);
