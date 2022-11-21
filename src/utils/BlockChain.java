@@ -18,7 +18,7 @@ public class BlockChain implements Serializable {
         return chain.get(chain.size() - 1).currentHash;
     }
 
-    public void add(String data, int dificulty) {
+    public void add(String data, int dificulty) throws InterruptedException {
         //hash of previous block
         String prevHash = getLastBlockHash();
         //mining block

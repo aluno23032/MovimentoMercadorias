@@ -1,7 +1,10 @@
 package trackingEncomendas;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Key;
+import java.security.PrivateKey;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.logging.Level;
@@ -18,21 +21,35 @@ import utils.SecurityUtils;
  *
  * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
-
 public class GUI extends javax.swing.JFrame {
 
+    private static Key loadKeyInicial() throws Exception {
+        byte[] data = Files.readAllBytes(Paths.get("edu.priv"));
+        //Decriptar ficheiro com password
+        data = SecurityUtils.decrypt(data, "edu");
+        //Guardar chave privada decriptada num ficheiro temporário
+        Files.write(Paths.get("temp.priv"), data);
+        //Carregar a chave privada (Key) a partir do ficheiro temporário
+        PrivateKey chavetemp = SecurityUtils.loadPrivateKey("temp.priv");
+        //Eliminar ficheiro temporário
+        Files.deleteIfExists(Paths.get("temp.priv"));
+        return chavetemp;
+    }
+
     BlockChain bc = new BlockChain();
-    
+
     Key publickey;
     Key privatekey;
     Key simetrickey;
-    
+    String password;
+
     Ledger ledgerMov = new Ledger();
     Ledger ledgerBloco = new Ledger();
     String user;
-    
+
     /**
      * Creates new form GUI
+     *
      * @param publickey
      * @param privatekey
      * @param simetrickey
@@ -41,7 +58,7 @@ public class GUI extends javax.swing.JFrame {
         this.publickey = publickey;
         this.privatekey = privatekey;
         this.simetrickey = simetrickey;
-        initComponents();    
+        initComponents();
     }
 
     /**
@@ -384,28 +401,28 @@ public class GUI extends javax.swing.JFrame {
             ledgerMov.add(m);
             ledgerBloco.add(m);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(new JFrame(), "Introduza um nº. de encomenda válido.", "Warning",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(new JFrame(), "Introduza um nº. de encomenda válido.", "Warning", JOptionPane.WARNING_MESSAGE);
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(new JFrame(), "Essa encomenda ja foi entregue.", "Warning",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(new JFrame(), "Essa encomenda ja foi entregue.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         DefaultListModel model = new DefaultListModel();
-            //adicionar movimentos à lista de movimentos
-            model.addAll(ledgerMov.getHistory());
-            listMovimentos.setModel(model);
+        //adicionar movimentos à lista de movimentos
+        model.addAll(ledgerMov.getHistory());
+        listMovimentos.setModel(model);
     }//GEN-LAST:event_btAtualizarEncomendaActionPerformed
 
     private void tbPanePrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tbPanePrincipalStateChanged
         // TODO add your handling code here:
-        if( tbPanePrincipal.getSelectedComponent()== painelUtilizadores){
+        if (tbPanePrincipal.getSelectedComponent() == painelUtilizadores) {
             DefaultListModel model = new DefaultListModel();
             model.addAll(ledgerMov.getUsers());
-            listUtilizadores.setModel(model); 
+            listUtilizadores.setModel(model);
         }
-        if( tbPanePrincipal.getSelectedComponent()== painelBlockChain){
+        if (tbPanePrincipal.getSelectedComponent() == painelBlockChain) {
             DefaultListModel model = new DefaultListModel();
             model.addAll(ledgerBloco.getHistory());
             ledgerBloco.toString();
-            listaMovimentosTemp.setModel(model); 
+            listaMovimentosTemp.setModel(model);
         }
     }//GEN-LAST:event_tbPanePrincipalStateChanged
 
@@ -423,7 +440,9 @@ public class GUI extends javax.swing.JFrame {
         if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 bc.save(fc.getSelectedFile().getAbsolutePath());
-                JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo",JOptionPane.INFORMATION_MESSAGE);
+                byte[] data = SecurityUtils.sign(Files.readAllBytes(Paths.get(fc.getSelectedFile().getAbsolutePath() + ".bc")), (PrivateKey) privatekey);
+                Files.write(Paths.get(fc.getSelectedFile().getName() + ".sign"), data);
+                JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -449,7 +468,11 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         String[] elements = ledgerBloco.toString().split("\\n");
         MerkleTree<String> mt = new MerkleTree<>(elements);
-        bc.add(MerkleTree.byteArrayToHex(mt.getRoot()), 1);
+        try {
+            bc.add(MerkleTree.byteArrayToHex(mt.getRoot()), 5);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         areaTxTBlockChain.setText(bc.toString());
         DefaultListModel listModel = (DefaultListModel) listaMovimentosTemp.getModel();
         listModel.removeAllElements();
@@ -460,7 +483,7 @@ public class GUI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -472,16 +495,15 @@ public class GUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
-        //</editor-fold>
 
+        //</editor-fold>
         java.awt.EventQueue.invokeLater(() -> {
             try {
                 new GUI(
                         SecurityUtils.loadPublicKey("edu" + ".pub"),
-                        SecurityUtils.loadPublicKey("edu" + ".priv"),
-                        SecurityUtils.loadPublicKey("edu" + ".sim")).setVisible(true);
-            } catch (IOException ex) {
+                        loadKeyInicial(),
+                        SecurityUtils.loadKey("edu" + ".sim")).setVisible(true);
+            } catch (Exception ex) {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
