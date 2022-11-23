@@ -28,6 +28,10 @@ public class Block implements Serializable {
 
     }
 
+    public String getData() {
+        return data;
+    }
+    
     public boolean isValid() {
         return currentHash.equals(calculateHash());
     }

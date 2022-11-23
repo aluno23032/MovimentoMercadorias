@@ -72,9 +72,9 @@ public class Movimento {
     @Override
     public String toString() {
         if (recebido == true) {
-            return "Encomenda n. " + idEncomenda + " feita por " + to + " a " + from + ": " + current + " Recebida";
+            return "Encomenda n. " + idEncomenda + " feita por " + to + " ao fornecedor " + from + ": " + current + " Recebida";
         } else {
-            return "Encomenda n. " + idEncomenda + " feita por " + to + " a " + from + ": " + current;
+            return "Encomenda n. " + idEncomenda + " feita por " + to + " ao fornecedor " + from + ": " + current;
         }
     }
 }

@@ -43,8 +43,6 @@ public class GUI extends javax.swing.JFrame {
     Key simetrickey;
     String password;
 
-    Ledger ledgerMov = new Ledger();
-    Ledger ledgerBloco = new Ledger();
     String user;
 
     /**
@@ -84,6 +82,8 @@ public class GUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         listMovimentos = new javax.swing.JList<>();
+        btGuardarBloco1 = new javax.swing.JButton();
+        btCarregarBloco1 = new javax.swing.JButton();
         painelUtilizadores = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listUtilizadores = new javax.swing.JList<>();
@@ -91,16 +91,6 @@ public class GUI extends javax.swing.JFrame {
         listEncomendas = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        painelBlockChain = new javax.swing.JPanel();
-        btGeraBloco = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        areaTxTBlockChain = new javax.swing.JTextArea();
-        btGuardarBloco = new javax.swing.JButton();
-        btCarregarBloco = new javax.swing.JButton();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        listaMovimentosTemp = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tracking Encomendas");
@@ -154,24 +144,40 @@ public class GUI extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(listMovimentos);
 
+        btGuardarBloco1.setText("Guardar");
+        btGuardarBloco1.setToolTipText("");
+        btGuardarBloco1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btGuardarBloco1ActionPerformed(evt);
+            }
+        });
+
+        btCarregarBloco1.setText("Carregar");
+        btCarregarBloco1.setToolTipText("");
+        btCarregarBloco1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCarregarBloco1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelMovimentosLayout = new javax.swing.GroupLayout(painelMovimentos);
         painelMovimentos.setLayout(painelMovimentosLayout);
         painelMovimentosLayout.setHorizontalGroup(
             painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelMovimentosLayout.createSequentialGroup()
+            .addGroup(painelMovimentosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3)
-                    .addGroup(painelMovimentosLayout.createSequentialGroup()
+                .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelMovimentosLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btAtualizarEncomenda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, painelMovimentosLayout.createSequentialGroup()
+                    .addComponent(btAtualizarEncomenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(painelMovimentosLayout.createSequentialGroup()
                         .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(painelMovimentosLayout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txtOrigem, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
+                            .addComponent(txtOrigem, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
                         .addGap(6, 6, 6)
                         .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(painelMovimentosLayout.createSequentialGroup()
@@ -187,6 +193,12 @@ public class GUI extends javax.swing.JFrame {
                             .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))))
                 .addContainerGap())
+            .addGroup(painelMovimentosLayout.createSequentialGroup()
+                .addGap(106, 106, 106)
+                .addComponent(btGuardarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76)
+                .addComponent(btCarregarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         painelMovimentosLayout.setVerticalGroup(
             painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,8 +225,12 @@ public class GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btGuardarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btCarregarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tbPanePrincipal.addTab("Movimento", painelMovimentos);
@@ -263,98 +279,13 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
                 .addContainerGap())
         );
 
         tbPanePrincipal.addTab("Utilizadores", painelUtilizadores);
         painelUtilizadores.getAccessibleContext().setAccessibleName("");
-
-        btGeraBloco.setText("Gerar Bloco");
-        btGeraBloco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btGeraBlocoActionPerformed(evt);
-            }
-        });
-
-        jLabel8.setText("Movimentos");
-
-        jLabel9.setText("BlockChain");
-
-        areaTxTBlockChain.setColumns(20);
-        areaTxTBlockChain.setRows(5);
-        jScrollPane5.setViewportView(areaTxTBlockChain);
-
-        btGuardarBloco.setText("Guardar");
-        btGuardarBloco.setToolTipText("");
-        btGuardarBloco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btGuardarBlocoActionPerformed(evt);
-            }
-        });
-
-        btCarregarBloco.setText("Carregar");
-        btCarregarBloco.setToolTipText("");
-        btCarregarBloco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCarregarBlocoActionPerformed(evt);
-            }
-        });
-
-        listaMovimentosTemp.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane6.setViewportView(listaMovimentosTemp);
-
-        javax.swing.GroupLayout painelBlockChainLayout = new javax.swing.GroupLayout(painelBlockChain);
-        painelBlockChain.setLayout(painelBlockChainLayout);
-        painelBlockChainLayout.setHorizontalGroup(
-            painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelBlockChainLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btGeraBloco, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-                        .addComponent(jScrollPane6))
-                    .addComponent(jLabel8))
-                .addGap(18, 18, 18)
-                .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelBlockChainLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(painelBlockChainLayout.createSequentialGroup()
-                        .addComponent(btGuardarBloco, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btCarregarBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane5))
-                .addContainerGap())
-        );
-        painelBlockChainLayout.setVerticalGroup(
-            painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelBlockChainLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelBlockChainLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE))
-                    .addGroup(painelBlockChainLayout.createSequentialGroup()
-                        .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane6)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(painelBlockChainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btGeraBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btGuardarBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btCarregarBloco, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        tbPanePrincipal.addTab("BlockChain", painelBlockChain);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -398,16 +329,19 @@ public class GUI extends javax.swing.JFrame {
         try {
             Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
             //adicionar movimento às ledger
-            ledgerMov.add(m);
-            ledgerBloco.add(m);
+            bc.add(m.toString(), 3);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(new JFrame(), "Introduza um nº. de encomenda válido.", "Warning", JOptionPane.WARNING_MESSAGE);
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(new JFrame(), "Essa encomenda ja foi entregue.", "Warning", JOptionPane.WARNING_MESSAGE);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         DefaultListModel model = new DefaultListModel();
         //adicionar movimentos à lista de movimentos
-        model.addAll(ledgerMov.getHistory());
+        for (int i=0; i<bc.getLength(); i++) {
+            model.add(i, bc.get(i).getData());
+        }
         listMovimentos.setModel(model);
     }//GEN-LAST:event_btAtualizarEncomendaActionPerformed
 
@@ -415,14 +349,8 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (tbPanePrincipal.getSelectedComponent() == painelUtilizadores) {
             DefaultListModel model = new DefaultListModel();
-            model.addAll(ledgerMov.getUsers());
+            model.addAll(bc.getUsers());
             listUtilizadores.setModel(model);
-        }
-        if (tbPanePrincipal.getSelectedComponent() == painelBlockChain) {
-            DefaultListModel model = new DefaultListModel();
-            model.addAll(ledgerBloco.getHistory());
-            ledgerBloco.toString();
-            listaMovimentosTemp.setModel(model);
         }
     }//GEN-LAST:event_tbPanePrincipalStateChanged
 
@@ -430,11 +358,11 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         user = listUtilizadores.getSelectedValue();
         DefaultListModel model2 = new DefaultListModel();
-        model2.addAll(ledgerMov.getUserEncomendas(user));
+        model2.addAll(bc.getUserEncomendas(user));
         listEncomendas.setModel(model2);
     }//GEN-LAST:event_listUtilizadoresValueChanged
 
-    private void btGuardarBlocoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarBlocoActionPerformed
+    private void btGuardarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarBloco1ActionPerformed
         // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();
         if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -448,36 +376,26 @@ public class GUI extends javax.swing.JFrame {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_btGuardarBlocoActionPerformed
+    }//GEN-LAST:event_btGuardarBloco1ActionPerformed
 
-    private void btCarregarBlocoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCarregarBlocoActionPerformed
+    private void btCarregarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCarregarBloco1ActionPerformed
         // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 bc.load(fc.getSelectedFile().getAbsolutePath());
-                areaTxTBlockChain.setText(bc.toString());
+                DefaultListModel model = new DefaultListModel();
+        //adicionar movimentos à lista de movimentos
+        for (int i=0; i<bc.getLength(); i++) {
+            model.add(i, bc.get(i).getData());
+        }
+        listMovimentos.setModel(model);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_btCarregarBlocoActionPerformed
-
-    private void btGeraBlocoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGeraBlocoActionPerformed
-        // TODO add your handling code here:
-        String[] elements = ledgerBloco.toString().split("\\n");
-        MerkleTree<String> mt = new MerkleTree<>(elements);
-        try {
-            bc.add(MerkleTree.byteArrayToHex(mt.getRoot()), 5);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        areaTxTBlockChain.setText(bc.toString());
-        DefaultListModel listModel = (DefaultListModel) listaMovimentosTemp.getModel();
-        listModel.removeAllElements();
-        ledgerBloco.clearHistory();
-    }//GEN-LAST:event_btGeraBlocoActionPerformed
+    }//GEN-LAST:event_btCarregarBloco1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -510,11 +428,9 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea areaTxTBlockChain;
     private javax.swing.JButton btAtualizarEncomenda;
-    private javax.swing.JButton btCarregarBloco;
-    private javax.swing.JButton btGeraBloco;
-    private javax.swing.JButton btGuardarBloco;
+    private javax.swing.JButton btCarregarBloco1;
+    private javax.swing.JButton btGuardarBloco1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -522,18 +438,12 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JList<String> listEncomendas;
     private javax.swing.JList<String> listMovimentos;
     private javax.swing.JList<String> listUtilizadores;
-    private javax.swing.JList<String> listaMovimentosTemp;
-    private javax.swing.JPanel painelBlockChain;
     private javax.swing.JPanel painelMovimentos;
     private javax.swing.JPanel painelUtilizadores;
     private javax.swing.JTabbedPane tbPanePrincipal;
