@@ -6,24 +6,21 @@ public class Miner extends Thread{
     
     static AtomicInteger nonceFound = new AtomicInteger(0);
     static AtomicInteger nonce = new AtomicInteger(0);
+    static int noncefinal;
     static String zeros;
-    static String data;
     
     public void run() {  
-        //calculate hash nonce + data
-        String hash = Hash.getHash(nonce + data);
         //nounce is found
-        if (hash.endsWith(zeros)) {
+        if (nonce.toString().endsWith(zeros)) {
             nonceFound.set(1);
+            noncefinal = nonce.get();
         }
     }
     
-    public static int getNonce(String data, int dificulty) throws InterruptedException {
-        Miner.data = data; 
+    public static int getNonce(int dificulty) throws InterruptedException {
         zeros = String.format("%0" + dificulty + "d", 0);
         int procs = Runtime.getRuntime().availableProcessors();
         Miner threads[] = new Miner[procs];
-        
         while (nonceFound.get() == 0) {
             for (int i = 0; i < threads.length; i++) {
                 // 2.2 - criar as threads com os limites
@@ -36,6 +33,6 @@ public class Miner extends Thread{
                 nonce.addAndGet(1);
             }
         }
-        return nonce.get();
+        return noncefinal;
     }
 }

@@ -329,7 +329,7 @@ public class GUI extends javax.swing.JFrame {
         try {
             Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
             //adicionar movimento às ledger
-            bc.add(m.toString(), 3);
+            bc.add(m.toString(), 5);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(new JFrame(), "Introduza um nº. de encomenda válido.", "Warning", JOptionPane.WARNING_MESSAGE);
         } catch (IllegalArgumentException e) {
@@ -339,8 +339,9 @@ public class GUI extends javax.swing.JFrame {
         }
         DefaultListModel model = new DefaultListModel();
         //adicionar movimentos à lista de movimentos
-        for (int i=0; i<bc.getLength(); i++) {
-            model.add(i, bc.get(i).getData());
+        for (int i=0; i < bc.getLength(); i++) {
+            //model.add(i, bc.get(i).getData());
+            model.add(i, bc.get(i));
         }
         listMovimentos.setModel(model);
     }//GEN-LAST:event_btAtualizarEncomendaActionPerformed

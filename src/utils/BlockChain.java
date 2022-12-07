@@ -7,7 +7,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import trackingEncomendas.Movimento;
 
 public class BlockChain implements Serializable {
 
@@ -28,7 +27,7 @@ public class BlockChain implements Serializable {
         //hash of previous block
         String prevHash = getLastBlockHash();
         //mining block
-        int nonce = Miner.getNonce(prevHash + data, dificulty);
+        int nonce = Miner.getNonce(dificulty);
         //build new block
         Block newBlock = new Block(prevHash, data, nonce);
         chain.add(newBlock);
