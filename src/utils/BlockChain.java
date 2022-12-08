@@ -5,6 +5,10 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +27,16 @@ public class BlockChain implements Serializable {
         return chain.size();
     }
 
-    public void add(String data, int dificulty) throws InterruptedException {
+    public void add(String data, int dificulty) throws InterruptedException, RemoteException, NotBoundException, MalformedURLException {
         //hash of previous block
         String prevHash = getLastBlockHash();
         //mining block
-        int nonce = Miner.getNonce(dificulty);
+        String host = "localhost";
+        String remoteObject = String.format("//%s:%d/%s", host, Server.remotePort, Server.remoteName);
+        RemoteInterface remoteHello = (RemoteInterface) Naming.lookup(remoteObject);
+        int nonce = remoteHello.mine(dificulty);
         //build new block
-        Block newBlock = new Block(prevHash, data, nonce);
+        Block newBlock = new Block(prevHash, Hash.getHash(data), nonce);
         chain.add(newBlock);
     }
 
@@ -37,11 +44,12 @@ public class BlockChain implements Serializable {
         return chain.get(index);
     }
 
+    @Override
     public String toString() {
         StringBuilder txt = new StringBuilder();
-        txt.append("Blochain size = " + chain.size() + "\n");
+        txt.append("Blochain size = ").append(chain.size()).append("\n");
         for (Block block : chain) {
-            txt.append(block.toString() + "\n");
+            txt.append(block.toString()).append("\n");
         }
         return txt.toString();
     }
@@ -68,7 +76,7 @@ public class BlockChain implements Serializable {
         //validate Links
         for (int i = 1; i < chain.size(); i++) {
             //previous hash !=  hash of previous
-            if (chain.get(i).previousHash != chain.get(i - 1).currentHash) {
+            if (!chain.get(i).previousHash.equals(chain.get(i - 1).currentHash)) {
                 return false;
             }
         }

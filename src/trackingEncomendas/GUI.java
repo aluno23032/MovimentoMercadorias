@@ -1,8 +1,10 @@
 package trackingEncomendas;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.security.Key;
 import java.security.PrivateKey;
 import java.time.LocalDateTime;
@@ -14,7 +16,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import utils.BlockChain;
-import utils.MerkleTree;
 import utils.SecurityUtils;
 
 /**
@@ -334,7 +335,7 @@ public class GUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(new JFrame(), "Introduza um nº. de encomenda válido.", "Warning", JOptionPane.WARNING_MESSAGE);
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(new JFrame(), "Essa encomenda ja foi entregue.", "Warning", JOptionPane.WARNING_MESSAGE);
-        } catch (InterruptedException ex) {
+        } catch (InterruptedException | RemoteException | NotBoundException | MalformedURLException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         DefaultListModel model = new DefaultListModel();

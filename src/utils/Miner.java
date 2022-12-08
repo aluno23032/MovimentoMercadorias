@@ -9,6 +9,7 @@ public class Miner extends Thread{
     static int noncefinal;
     static String zeros;
     
+    @Override
     public void run() {  
         //nounce is found
         if (nonce.toString().endsWith(zeros)) {
