@@ -2,7 +2,7 @@ package utils;
 
 import java.io.Serializable;
 
-public class Block implements Serializable {
+public final class Block implements Serializable {
 
     String previousHash; // link to previous block
     String data;         // data in the block
@@ -20,6 +20,7 @@ public class Block implements Serializable {
         return Hash.getHash(nonce + previousHash + data);
     }
 
+    @Override
     public String toString() {
         return (isValid() ? "OK\t" : "ERROR\t")
                 + String.format("%8s", previousHash) + " <-[" + 

@@ -39,10 +39,7 @@ public class GUI extends javax.swing.JFrame {
 
     BlockChain bc = new BlockChain();
 
-    Key publickey;
     Key privatekey;
-    Key simetrickey;
-    String password;
 
     String user;
 
@@ -54,9 +51,7 @@ public class GUI extends javax.swing.JFrame {
      * @param simetrickey
      */
     public GUI(Key publickey, Key privatekey, Key simetrickey) {
-        this.publickey = publickey;
         this.privatekey = privatekey;
-        this.simetrickey = simetrickey;
         initComponents();
     }
 

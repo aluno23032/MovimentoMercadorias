@@ -34,9 +34,9 @@ public class BlockChain implements Serializable {
         String host = "localhost";
         String remoteObject = String.format("//%s:%d/%s", host, Server.remotePort, Server.remoteName);
         RemoteInterface remoteHello = (RemoteInterface) Naming.lookup(remoteObject);
-        int nonce = remoteHello.mine(dificulty);
+        int nonce = remoteHello.mine(data, dificulty);
         //build new block
-        Block newBlock = new Block(prevHash, Hash.getHash(data), nonce);
+        Block newBlock = new Block(prevHash, data, nonce);
         chain.add(newBlock);
     }
 

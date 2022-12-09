@@ -21,21 +21,11 @@ public final class MerkleTree<T> implements Serializable {
     // elements of tree
     List<T> elements;
 
-    /**
-     * Builds a merkle tree with an array of data
-     *
-     * @param arrayOfData list of data
-     */
     public MerkleTree(T[] arrayOfData) {
         this(Arrays.asList(arrayOfData));
 
     }
 
-    /**
-     * Builds a merkle tree with an list of data
-     *
-     * @param listOfData list of data
-     */
     public MerkleTree(List<T> listOfData) {
         this(); //build lists
         //save data
@@ -51,48 +41,25 @@ public final class MerkleTree<T> implements Serializable {
         makeTree(hashT);
     }
 
-    /**
-     * Builds an empty merkle tree
-     */
     public MerkleTree() {
         //build lists
         hashTree = new ArrayList<>();
         elements = new ArrayList<>();
     }
 
-    /**
-     * root of tree
-     *
-     * @return root of tree
-     */
     public byte[] getRoot() {
         //top o list
         return hashTree.get(0).get(0);
     }
 
-    /**
-     * gets the merkle tree
-     *
-     * @return tree
-     */
     public List<List<byte[]>> getMerkleTree() {
         return hashTree;
     }
 
-    /**
-     * gets the elements in the merkle tree
-     *
-     * @return elements
-     */
     public List<T> getElements() {
         return elements;
     }
 
-    /**
-     * builds a merkle tree
-     *
-     * @param hashList list of hashs
-     */
     public void makeTree(List<byte[]> hashList) {
         //add hashlist to the beginning of tree
         hashTree.add(0, hashList);
@@ -231,6 +198,7 @@ public final class MerkleTree<T> implements Serializable {
     /**
      * verify the proof of an element
      *
+     * @param <T>
      * @param data dara
      * @param proof list of proofs
      * @return true if the proof is valid
@@ -380,12 +348,6 @@ public final class MerkleTree<T> implements Serializable {
         return txt.toString();
     }
 
-    /**
-     * calculate the hexadecimal string of an list of byte array elements
-     *
-     * @param list list of byte array elements
-     * @return hexadecimal string
-     */
     public static List<byte[]> hexStringToByteArrayList(String txt) {
         txt = txt.replaceAll("[\\[\\]\"]", "");
         String elem[] = txt.split(" ");

@@ -109,13 +109,6 @@ public class SecurityUtils {
         return keyGen.generateKeyPair();
     }
 
-    /**
-     * Gera um par de chave para o algoritmo RSA
-     *
-     * @param size tamanho da chave minimo 512
-     * @return par de chaves RSA
-     * @throws Exception
-     */
     public static KeyPair generateRSAKeyPair(int size) throws Exception {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
         //tamanho da chave
@@ -124,14 +117,6 @@ public class SecurityUtils {
         return keyGen.generateKeyPair();
     }
 
-    /**
-     * Gera um par de chave para o algoritmo RSA
-     *
-     * @param size tamanho da chave minimo 512
-     * @param provider provider
-     * @return par de chaves RSA
-     * @throws Exception
-     */
     public static KeyPair generateRSAKeyPair(int size, String provider) throws Exception {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA", provider);
         //tamanho da chave
@@ -140,16 +125,6 @@ public class SecurityUtils {
         return keyGen.generateKeyPair();
     }
 
-    /**
-     * Transforma um array de bytes representante de uma chave publica em chave
-     * publica
-     *
-     * @param pubData array de bytes representante da chave
-     * @return a chave publica em forma de chave
-     * @throws Exception Caso ocorra algum erro:
-     * <code>NoSuchAlgorithmException</code>,<code>InvalidKeySpecException</code>,<code>NullPointerException</code>
-     * e <code>NoSuchProviderException</code>
-     */
     public static PublicKey getPublicKey(byte[] pubData) throws Exception {
         //especificação do encoding da chave publica X509
         X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubData);
@@ -164,22 +139,12 @@ public class SecurityUtils {
                 keyFactory = KeyFactory.getInstance("EC");
                 //Gerar a chave pública
                 return keyFactory.generatePublic(pubSpec);
-            } catch (Exception ex2) {
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException ex2) {
                 throw new InvalidAlgorithmParameterException();
             }
         }
     }
 
-    /**
-     * Transforma um array de bytes representante de uma chave privada em chave
-     * privada
-     *
-     * @param privData array de bytes representante da chave
-     * @return a chave privada em forma de chave
-     * @throws Exception Caso ocorra algum erro:
-     * <code>NoSuchAlgorithmException</code>,<code>InvalidKeySpecException</code>,<code>NullPointerException</code>
-     * e <code>NoSuchProviderException</code>
-     */
     public static PrivateKey getPrivateKey(byte[] privData) throws Exception {
         //especificações da chave privada PKCS8
         PKCS8EncodedKeySpec privSpec = new PKCS8EncodedKeySpec(privData);
@@ -194,18 +159,12 @@ public class SecurityUtils {
                 keyFactory = KeyFactory.getInstance("EC");
                 //Gerar a chave privada
                 return keyFactory.generatePrivate(privSpec);
-            } catch (Exception ex2) {
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException ex2) {
                 throw new InvalidAlgorithmParameterException();
             }
         }
     }
 
-    /**
-     * Gera uma chave AES
-     *
-     * @param key chave em array de bytes
-     * @return chave chave carregada através da base64
-     */
     public static Key getAESKey(byte[] key) {
         return new SecretKeySpec(key, "AES");
     }
@@ -341,18 +300,7 @@ public class SecurityUtils {
         //decifrar os dados
         return cipher.doFinal(data);
     }
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //:::::::::::        PASSWORD BASED ENCRYPTATION                 :::::::::::
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    /**
-     * Cria um objecto de cifragem com password
-     *
-     * @param mode Cipher.DECRYPT_MODE ou Cipher.ENCRYPT_MODE
-     * @param password password de da cifra
-     * @return Objecto de cifragem
-     * @throws Exception
-     */
     public static Cipher createCipherPBE(int mode, String password) throws Exception {
         //Criar a chave da cifra
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
@@ -385,17 +333,6 @@ public class SecurityUtils {
         System.out.println(new String(plain));
     }
 
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //:::::::::::               ENCRYPT /  DECRYPT                   :::::::::::
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    /**
-     * encripta dados usando uma password de texto
-     *
-     * @param data dados para encriptar
-     * @param password password de encriptação
-     * @return dados encriptados
-     * @throws Exception
-     */
     public static byte[] encrypt(byte[] data, String password) throws Exception {
         //criar um objecto de cifragem da chave
         Cipher cipher = createCipherPBE(Cipher.ENCRYPT_MODE, password);
@@ -403,14 +340,6 @@ public class SecurityUtils {
         return cipher.doFinal(data);
     }
 
-    /**
-     * desencripta dados usando uma password de texto
-     *
-     * @param data dados para desencriptar
-     * @param password password de desencriptação
-     * @return dados desencriptados
-     * @throws Exception
-     */
     public static byte[] decrypt(byte[] data, String password) throws Exception {
         //criar um objecto de cifragem da chave
         Cipher cipher = createCipherPBE(Cipher.DECRYPT_MODE, password);
@@ -418,14 +347,6 @@ public class SecurityUtils {
         return cipher.doFinal(data);
     }
 
-    /**
-     * Escreve a mensagem message encriptada com uma chave simetrica numa stream
-     *
-     * @param message mensagem a encriptar
-     * @param out stream de saida
-     * @param key chave de encriptacao
-     * @throws Exception
-     */
     public static void writeCrypt(byte[] message, OutputStream out, Key key) throws Exception {
         //criar a cifra
         Cipher cipher = Cipher.getInstance(key.getAlgorithm());
@@ -439,14 +360,6 @@ public class SecurityUtils {
         cos.close();
     }
 
-    /**
-     * Le a mensagem cifrada com a chave key de uma stream
-     *
-     * @param in stream de entrada
-     * @param key chave de cifragem
-     * @return bytes do ficheiro
-     * @throws Exception
-     */
     public static byte[] readCrypt(InputStream in, Key key) throws Exception {
         //objecto para decifrar
         Cipher cipher = Cipher.getInstance(key.getAlgorithm());
@@ -457,9 +370,6 @@ public class SecurityUtils {
         return cis.readAllBytes();
     }
 
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //:::::::::      I N T E G R I T Y         :::::::::::::::::::::::::::::::::    
-    ///////////////////////////////////////////////////////////////////////////
     public static byte[] calculateHash(byte[] data, String algorithm)
             throws Exception {
         MessageDigest md = MessageDigest.getInstance(algorithm);
@@ -474,29 +384,13 @@ public class SecurityUtils {
         return Arrays.equals(trueHash, hash);
     }
 
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //:::::::::       S I G N A T U R E        :::::::::::::::::::::::::::::::::    
-    ///////////////////////////////////////////////////////////////////////////
-    /**
-     * Assina os dados passados com a chave privada passada
-     *
-     * @param data dados a serem utilizados para a assinatura
-     * @param key chave que irá assinar os dados
-     * @return A assinatura em um array de bytes
-     * @throws Exception Caso ocorra algum erro, como por exemplo o algoritmo
-     * não existir
-     */
     public static byte[] sign(byte[] data, PrivateKey key) throws Exception {
         Signature sign;
         //verifica qual o algoritmo a ser utilizado
         switch (key.getAlgorithm()) {
-            case "RSA":
-                sign = Signature.getInstance("SHA256withRSA");
-                break;
-            case "EC":
-                sign = Signature.getInstance("SHA256withECDSA");
-                break;
-            default: //caso o algoritmo pedido não exista
+            case "RSA" -> sign = Signature.getInstance("SHA256withRSA");
+            case "EC" -> sign = Signature.getInstance("SHA256withECDSA");
+            default -> //caso o algoritmo pedido não exista
                 throw new InvalidAlgorithmParameterException();
         }
         //inicializa a assinatura com a chave
@@ -507,28 +401,13 @@ public class SecurityUtils {
         return sign.sign();
     }
 
-    /**
-     * Verifica se assinatura é valida
-     *
-     * @param data dados assinados a serem validados com a assinatura
-     * @param signature assinatura a ser validado
-     * @param key cahve publica que faz par com a chave privada que foi
-     * utilizada na assinatura
-     * @return se a assinatura é valida
-     * @throws Exception Caso ocorra algum erro, como por exemplo o algoritmo
-     * não existir
-     */
     public static boolean verifySign(byte[] data, byte[] signature, PublicKey key) throws Exception {
         Signature sign;
         //verifica qual o algoritmo a ser utilizado
         switch (key.getAlgorithm()) {
-            case "RSA":
-                sign = Signature.getInstance("SHA256withRSA");
-                break;
-            case "EC":
-                sign = Signature.getInstance("SHA256withECDSA");
-                break;
-            default: //caso o algoritmo pedido não exista
+            case "RSA" -> sign = Signature.getInstance("SHA256withRSA");
+            case "EC" -> sign = Signature.getInstance("SHA256withECDSA");
+            default -> //caso o algoritmo pedido não exista
                 throw new InvalidAlgorithmParameterException();
         }
         //inicializa a validação da assinatura com a chave
@@ -538,16 +417,6 @@ public class SecurityUtils {
         return sign.verify(signature);
     }
 
-        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //:::::::::::        ZIP /  UNZIP                                :::::::::::
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    /**
-     * Comprime um array de bytes utilizando o algoritmo GZIP
-     *
-     * @param data dados originais
-     * @return dados comprimidos
-     * @throws IOException
-     */
     public static byte[] zip(byte[] data) throws IOException {
         //array de bytes em memória
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -561,13 +430,6 @@ public class SecurityUtils {
         return bout.toByteArray();
     }
 
-    /**
-     * Expande um array de dados comprimidos pelo algoritmo GZIP
-     *
-     * @param data dados comprimidos
-     * @return dados originais
-     * @throws IOException
-     */
     public static byte[] unzip(byte[] data) throws IOException {
         //Stream com Array de bytes em memória
         ByteArrayInputStream bin = new ByteArrayInputStream(data);
@@ -577,13 +439,8 @@ public class SecurityUtils {
         return zin.readAllBytes();
     }
 
-    /**
-     * Extensão utilizada para armazenar chaves privadas em ficheiros
-     */
     public static String KEY_EXTENSION_FILE = "sim";
-    /**
-     * Extensão utilizada para armazenar chaves privadas em ficheiros
-     */
+
     public static String PRIVATE_KEY_EXTENSION_FILE = "priv";
     /**
      * Extensão utilizada para armazenar chaves publicas em ficheiros

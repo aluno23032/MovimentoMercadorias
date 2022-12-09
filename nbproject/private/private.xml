@@ -4,8 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/trackingEncomendas/GUI.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/MerkleTree.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/Server.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/Block.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/BlockChain.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/SecurityUtils.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/RemoteInterface.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/Miner.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/RemoteObject.java</file>

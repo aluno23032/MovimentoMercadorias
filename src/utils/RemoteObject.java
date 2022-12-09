@@ -39,11 +39,11 @@ public class RemoteObject extends UnicastRemoteObject implements RemoteInterface
     }
     
     @Override
-    public int mine(int difficulty) throws RemoteException {
+    public int mine(String data, int difficulty) throws RemoteException {
         //int nonce = mine(message, dificulty);
         try {
             int nonce;
-            nonce = Miner.getNonce(difficulty);
+            nonce = Miner.getNonce(data, difficulty);
             System.out.println("Nonce   = " + nonce);
             return nonce;
         } catch (InterruptedException ex) {

@@ -1,5 +1,6 @@
 package account;
 
+import java.awt.HeadlessException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Key;
@@ -211,7 +212,7 @@ public class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(new JFrame(), "There is no user with this username.", "Warning",
                         JOptionPane.WARNING_MESSAGE);
             }
-        } catch (Exception ex) {
+        } catch (HeadlessException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -256,10 +257,8 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 
