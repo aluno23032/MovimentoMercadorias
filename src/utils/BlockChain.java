@@ -23,18 +23,31 @@ public class BlockChain implements Serializable {
         return chain.get(chain.size() - 1).currentHash;
     }
 
+    public ArrayList<Block> getChain() {
+        return chain;
+    }
+
     public int getLength() {
         return chain.size();
     }
 
-    public void add(String data, int dificulty) throws InterruptedException, RemoteException, NotBoundException, MalformedURLException {
+    public void add(Block b) throws Exception {
+        //verify the linktotheprevious
+        if (chain.size() > 1 && !getLastBlockHash().equals(b.previousHash)) {
+            throw new Exception("Previous link not match");
+        }
+        //verify block hash
+        if (!b.isValid()) {
+            throw new Exception("Block not valid");
+        }
+        chain.add(b);
+    }
+
+    public void add(String data, int dificulty) throws InterruptedException, RemoteException, NotBoundException, MalformedURLException, Exception {
         //hash of previous block
         String prevHash = getLastBlockHash();
         //mining block
-        String host = "localhost";
-        String remoteObject = String.format("//%s:%d/%s", host, Server.remotePort, Server.remoteName);
-        RemoteInterface remoteHello = (RemoteInterface) Naming.lookup(remoteObject);
-        int nonce = remoteHello.mine(data, dificulty);
+        int nonce = new Miner(null).mine(data, dificulty);
         //build new block
         Block newBlock = new Block(prevHash, data, nonce);
         chain.add(newBlock);
@@ -66,7 +79,7 @@ public class BlockChain implements Serializable {
         }
     }
 
-    public boolean isValid() {
+    public boolean isValid() throws Exception {
         //Validate blocks
         for (Block block : chain) {
             if (!block.isValid()) {
@@ -84,23 +97,26 @@ public class BlockChain implements Serializable {
     }
 
     public List<String> getUsers() {
-        List<String> l = new ArrayList<>();
-        String user;
-        for (Block bloco : chain) {
-            String result = bloco.data.split("feita por ")[1];
-            result = result.split(" ao fornecedor")[0];
-            user = result;
-            if (!l.contains(user)) {
-                l.add(user);
+        if (!chain.isEmpty()) {
+            List<String> l = new ArrayList<>();
+            String user;
+            for (Block bloco : chain) {
+                String result = bloco.merkleTree.split("feita por ")[1];
+                result = result.split(" ao fornecedor")[0];
+                user = result;
+                if (!l.contains(user)) {
+                    l.add(user);
+                }
             }
+            return l;
         }
-        return l;
+        return null;
     }
 
     public List<String> getUserEncomendas(String user) {
         List<String> l = new ArrayList<>();
         for (Block bloco : chain) {
-            String result = bloco.data.split("feita por ")[1];
+            String result = bloco.merkleTree.split("feita por ")[1];
             result = result.split(" ao fornecedor")[0];
             if (result.equals(user)) {
                 if (!l.isEmpty()) {
@@ -113,17 +129,17 @@ public class BlockChain implements Serializable {
                     if (hasOld == true) {
                         l.removeIf(s -> s.contains("1"));
                     }
-                    if (!bloco.data.contains("Recebida")) {
-                        String result2 = bloco.data.split("Encomenda n. ")[1];
+                    if (!bloco.merkleTree.contains("Recebida")) {
+                        String result2 = bloco.merkleTree.split("Encomenda n. ")[1];
                         result2 = result2.split(" feita por")[0];
-                        String result3 = bloco.data.split(": ")[1];
+                        String result3 = bloco.merkleTree.split(": ")[1];
                         result3 = result3.split(" Recebida")[0];
                         l.add("Encomenda n. " + result2 + " : " + result3);
                     }
                 } else {
-                    String result2 = bloco.data.split("Encomenda n. ")[1];
+                    String result2 = bloco.merkleTree.split("Encomenda n. ")[1];
                     result2 = result2.split(" feita por")[0];
-                    String result3 = bloco.data.split(": ")[1];
+                    String result3 = bloco.merkleTree.split(": ")[1];
                     result3 = result3.split(" Recebida")[0];
                     l.add("Encomenda n. " + result2 + " : " + result3);
                 }

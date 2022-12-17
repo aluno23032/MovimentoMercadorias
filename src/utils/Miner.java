@@ -1,65 +1,223 @@
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
+//::                                                                         ::
+//::     Antonio Manuel Rodrigues Manso                                      ::
+//::                                                                         ::
+//::     Biosystems & Integrative Sciences Institute                         ::
+//::     Faculty of Sciences University of Lisboa                            ::
+//::     http://www.fc.ul.pt/en/unidade/bioisi                               ::
+//::                                                                         ::
+//::                                                                         ::
+//::     I N S T I T U T O    P O L I T E C N I C O   D E   T O M A R        ::
+//::     Escola Superior de Tecnologia de Tomar                              ::
+//::     e-mail: manso@ipt.pt                                                ::
+//::     url   : http://orion.ipt.pt/~manso                                  ::
+//::                                                                         ::
+//::     This software was build with the purpose of investigate and         ::
+//::     learning.                                                           ::
+//::                                                                         ::
+//::                                                               (c)2021   ::
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//////////////////////////////////////////////////////////////////////////////
 package utils;
 
+import utils.Block;
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Miner extends Thread {
+/**
+ * Created on 02/11/2021, 18:28:06 Updated on 07/12/2021
+ *
+ * @author IPT - computer
+ */
+public class Miner {
 
-    private static final int MAX = (int) 1E9;
-    static AtomicInteger nonce = new AtomicInteger(0);
-    private static  int found = 0;
-    static String data;
-    private final int dificulty;
+    //atributos 
+    MiningListener listener;            // Listener dos mineiros
+    private MinerThread[] threads;      // Threads de calculo de hashs
+    private ExecutorService exe;        // Executor das Tbhreads
 
-    public Miner(String data, int dificulty) {
-        Miner.data = data;
-        this.dificulty = dificulty;
+    private String message;             //  Mensagem a ser minada 
+    private AtomicInteger globalNonce;  // Nonce que valida a mensagem
+    private AtomicInteger ticket;       // Ticket para as threada 
+
+    public Miner(MiningListener listener) {
+        this.listener = listener;
     }
 
-    @Override
-    public void run() {
-
-        String zeros = String.format("%0" + dificulty + "d", 0);
-        nonce.set(0);
-        String hash = null;
-        while (nonce.get() < MAX || found != 1) {
-            hash = Hash.getHash(nonce.get() + data);
-            if (hash.endsWith(zeros)) {
-                found = 1;
-
-
-                return;
-            }
-            nonce.incrementAndGet();
+    /**
+     * inicia a mineração de uma mensagem
+     *
+     * @param message mensagem
+     * @param zeros número de zeros do hash
+     * @throws Exception
+     */
+    public void startMining(String message, int zeros) throws Exception {
+        //está a minar
+        if (isMining()) {
+            return; // Sair
         }
-
-
-
-
-
-    }
-
-    public static int getNonce(String data, int dificulty) throws InterruptedException {
-        //string of dificulty zeros "0..0"
-        Miner.data = data;
-        String format = String.format("%0" + dificulty + "d", 0);
-        int procs = Runtime.getRuntime().availableProcessors();
-        Miner threads[] = new Miner[procs];
-
-        while (found == 0) {
-            for (int i = 0; i < procs; i++) {
-                //cria as threads com os limites
-                threads[i] = new Miner(data, dificulty);
-                //executa as threads
-                threads[i].start();
-            }
-            for (Miner th: threads) {
-                th.join();
-            }
+        //notificar o listener
+        if (listener != null) {
+            listener.onStartMining(message, zeros);
         }
-        return nonce.get();
+        this.message = message;
+        //inicializar o ticket com um numero aleatórios positivo
+        Random rnd = new Random();
+        ticket = new AtomicInteger(Math.abs(rnd.nextInt() / 2));
+        //configurar os atributos    
+        int numCores = 4;//Runtime.getRuntime().availableProcessors();
+        threads = new MinerThread[numCores];
+        exe = Executors.newFixedThreadPool(numCores);
+        //inicializar o globalNonce
+        globalNonce = new AtomicInteger();
+
+        //executar as threads
+        for (int i = 0; i < numCores; i++) {
+            threads[i] = new MinerThread(globalNonce, ticket, message, zeros, listener);
+            exe.execute(threads[i]);
+        }
+        //fechar a pool
+        exe.shutdown();
+
     }
 
-    public static void setNonce(){
-        found = 0;
+    /**
+     * devolve o hash da mensagem + nonce
+     *
+     * @return hash(mensagem + nonce)
+     */
+    public String getHash() {
+        try {
+            getHash(message, globalNonce.get());
+        } catch (Exception ex) {
+        }
+        return "ERROR";
     }
+
+    /**
+     * Terminar a mineração
+     *
+     * @param nonce numero maior que zero
+     */
+    public void stopMining(int nonce) {
+        globalNonce.set(nonce);
+    }
+
+    /**
+     * Verificar se está a minerar
+     *
+     * @return está a minerar
+     */
+    public boolean isMining() {
+        return globalNonce != null && globalNonce.get() <= 0;
+    }
+
+    /**
+     * Devolve o resultado da mineração ou zero
+     *
+     * @return nonce
+     */
+    public int getNonce() {
+        return globalNonce.get();
+    }
+
+    /**
+     * mensagem
+     *
+     * @return message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * Devolve o ticket que está a ser testado
+     *
+     * @return nonce
+     */
+    public int getTicket() {
+        return ticket.get();
+    }
+
+    /**
+     * Devolve o resultado da mineração ou zero
+     *
+     * @return nonce
+     * @throws java.lang.InterruptedException
+     */
+    public int waitToNonce() throws InterruptedException {
+        exe.awaitTermination(1, TimeUnit.DAYS);
+        return globalNonce.get();
+    }
+
+    /**
+     * Calcula o valor do nonce da mensagem
+     *
+     * @param message mensagem
+     * @param zeros número de zeros
+     * @return
+     * @throws Exception
+     */
+    public int mine(String message, int zeros) throws Exception {
+        startMining(message, zeros);
+        exe.awaitTermination(1, TimeUnit.DAYS);
+        return globalNonce.get();
+    }
+
+    /**
+     * valida um bloco
+     *
+     * @param b block
+     * @param message mensagem
+     * @return
+     * @throws Exception
+     */
+    public Block mine(Block b) throws Exception {
+        startMining(b.getHeader(), b.getZeros());
+        exe.awaitTermination(1, TimeUnit.DAYS);
+        b.setNonce(globalNonce.get());
+        return b;
+    }
+
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    //:::::::::      I N T E G R I T Y         :::::::::::::::::::::::::::::::::    
+    ///////////////////////////////////////////////////////////////////////////
+    public static String hashAlgorithm = "SHA3-256";
+
+    /**
+     * calcula a hash da mensagem com o nonce em Base64
+     *
+     * @param data dados
+     * @param nonce nonce
+     * @return hash(mensagem + nonce)
+     */
+    public static String getHash(String data, int nonce) {
+        try {
+            return getHash(data + nonce);
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+    }
+
+    /**
+     * calcula a hash da mensagem em Base64
+     *
+     * @param data mensagem
+     * @return Base64(hash(data))
+     * @throws Exception
+     */
+    public static String getHash(String data) throws Exception {
+        MessageDigest md = MessageDigest.getInstance(hashAlgorithm);
+        md.update(data.getBytes());
+        return Base64.getEncoder().encodeToString(md.digest());
+    }
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    private static final long serialVersionUID = 202111021828L;
+    //:::::::::::::::::::::::::::  Copyright(c) M@nso  2021  :::::::::::::::::::
+    ///////////////////////////////////////////////////////////////////////////
 }

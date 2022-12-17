@@ -1,5 +1,7 @@
 package trackingEncomendas;
 
+import blockChain.p2p.miner.InterfaceRemoteMiner;
+import java.awt.Color;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,7 +17,11 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import utils.BlockChain;
+import utils.GuiUtils;
+import utils.Miner;
+import utils.RMI;
 import utils.SecurityUtils;
 
 /**
@@ -37,10 +43,8 @@ public class GUI extends javax.swing.JFrame {
         return chavetemp;
     }
 
-    BlockChain bc = new BlockChain();
-
+    InterfaceRemoteMiner miner;
     Key privatekey;
-
     String user;
 
     /**
@@ -65,6 +69,9 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         tbPanePrincipal = new javax.swing.JTabbedPane();
+        painelServer = new javax.swing.JPanel();
+        btStartServer = new javax.swing.JButton();
+        txtAddress = new javax.swing.JTextField();
         painelMovimentos = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         btAtualizarEncomenda = new javax.swing.JButton();
@@ -96,6 +103,40 @@ public class GUI extends javax.swing.JFrame {
                 tbPanePrincipalStateChanged(evt);
             }
         });
+
+        btStartServer.setText("Connect To Server ");
+        btStartServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btStartServerActionPerformed(evt);
+            }
+        });
+
+        txtAddress.setFont(new java.awt.Font("Courier New", 1, 14)); // NOI18N
+        txtAddress.setText("//10.10.209.111:10010/miner");
+        txtAddress.setBorder(javax.swing.BorderFactory.createTitledBorder("Server Address"));
+
+        javax.swing.GroupLayout painelServerLayout = new javax.swing.GroupLayout(painelServer);
+        painelServer.setLayout(painelServerLayout);
+        painelServerLayout.setHorizontalGroup(
+            painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelServerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btStartServer)
+                .addContainerGap())
+        );
+        painelServerLayout.setVerticalGroup(
+            painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelServerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btStartServer, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(297, Short.MAX_VALUE))
+        );
+
+        tbPanePrincipal.addTab("Server", painelServer);
 
         jLabel3.setText("De:");
 
@@ -231,11 +272,6 @@ public class GUI extends javax.swing.JFrame {
 
         tbPanePrincipal.addTab("Movimento", painelMovimentos);
 
-        listUtilizadores.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         listUtilizadores.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 listUtilizadoresValueChanged(evt);
@@ -322,31 +358,38 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_txtOrigemActionPerformed
 
     private void btAtualizarEncomendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualizarEncomendaActionPerformed
+        Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
         try {
-            Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
-            //adicionar movimento às ledger
-            bc.add(m.toString(), 5);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(new JFrame(), "Introduza um nº. de encomenda válido.", "Warning", JOptionPane.WARNING_MESSAGE);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(new JFrame(), "Essa encomenda ja foi entregue.", "Warning", JOptionPane.WARNING_MESSAGE);
-        } catch (InterruptedException | RemoteException | NotBoundException | MalformedURLException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        DefaultListModel model = new DefaultListModel();
-        //adicionar movimentos à lista de movimentos
-        for (int i=0; i < bc.getLength(); i++) {
-            //model.add(i, bc.get(i).getData());
-            model.add(i, bc.get(i));
-        }
+            if (miner.isMining()) {
+                miner.stopMining(9999);
+            } else {
+                new Thread(() -> {
+                    try {
+                        miner.mine(m.toString(), 3);
+                    } catch (RemoteException ex) {
+                    }
+                }).start();
+            }
+            DefaultListModel model = new DefaultListModel();
+            //adicionar movimentos à lista de movimentos
+            for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
+                model.add(i, miner.getBlockChain().get(i));
+            }
         listMovimentos.setModel(model);
+        } catch (RemoteException ex) {
+        }
+        
     }//GEN-LAST:event_btAtualizarEncomendaActionPerformed
 
     private void tbPanePrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tbPanePrincipalStateChanged
         // TODO add your handling code here:
         if (tbPanePrincipal.getSelectedComponent() == painelUtilizadores) {
             DefaultListModel model = new DefaultListModel();
-            model.addAll(bc.getUsers());
+            try {
+                model.addAll(miner.getBlockChain().getUsers());
+            } catch (RemoteException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
             listUtilizadores.setModel(model);
         }
     }//GEN-LAST:event_tbPanePrincipalStateChanged
@@ -355,7 +398,11 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         user = listUtilizadores.getSelectedValue();
         DefaultListModel model2 = new DefaultListModel();
-        model2.addAll(bc.getUserEncomendas(user));
+        try {
+            model2.addAll(miner.getBlockChain().getUserEncomendas(user));
+        } catch (RemoteException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         listEncomendas.setModel(model2);
     }//GEN-LAST:event_listUtilizadoresValueChanged
 
@@ -364,7 +411,7 @@ public class GUI extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
-                bc.save(fc.getSelectedFile().getAbsolutePath());
+                miner.getBlockChain().save(fc.getSelectedFile().getAbsolutePath());
                 byte[] data = SecurityUtils.sign(Files.readAllBytes(Paths.get(fc.getSelectedFile().getAbsolutePath() + ".bc")), (PrivateKey) privatekey);
                 Files.write(Paths.get(fc.getSelectedFile().getName() + ".sign"), data);
                 JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo", JOptionPane.INFORMATION_MESSAGE);
@@ -380,19 +427,37 @@ public class GUI extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
-                bc.load(fc.getSelectedFile().getAbsolutePath());
+                miner.getBlockChain().load(fc.getSelectedFile().getAbsolutePath());
                 DefaultListModel model = new DefaultListModel();
-        //adicionar movimentos à lista de movimentos
-        for (int i=0; i<bc.getLength(); i++) {
-            model.add(i, bc.get(i).getData());
-        }
-        listMovimentos.setModel(model);
+                //adicionar movimentos à lista de movimentos
+                for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
+                    model.add(i, miner.getBlockChain().get(i).getData());
+                }
+                listMovimentos.setModel(model);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btCarregarBloco1ActionPerformed
+
+    private void btStartServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStartServerActionPerformed
+        try {
+            miner = (InterfaceRemoteMiner) RMI.getRemote(txtAddress.getText());
+            tbPanePrincipal.setSelectedComponent(painelMovimentos);
+            DefaultListModel model = new DefaultListModel();
+            try {
+                //adicionar movimentos à lista de movimentos
+                for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
+                    model.add(i, miner.getBlockChain().get(i));
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            listMovimentos.setModel(model);
+        } catch (Exception ex) {
+        }
+    }//GEN-LAST:event_btStartServerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -428,6 +493,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton btAtualizarEncomenda;
     private javax.swing.JButton btCarregarBloco1;
     private javax.swing.JButton btGuardarBloco1;
+    private javax.swing.JButton btStartServer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -442,8 +508,10 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JList<String> listMovimentos;
     private javax.swing.JList<String> listUtilizadores;
     private javax.swing.JPanel painelMovimentos;
+    private javax.swing.JPanel painelServer;
     private javax.swing.JPanel painelUtilizadores;
     private javax.swing.JTabbedPane tbPanePrincipal;
+    private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtDestino;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtLocalizacao;
