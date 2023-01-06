@@ -1,11 +1,10 @@
 package trackingEncomendas;
 
 import blockChain.p2p.miner.InterfaceRemoteMiner;
-import java.awt.Color;
-import java.net.MalformedURLException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.security.Key;
 import java.security.PrivateKey;
@@ -17,10 +16,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import utils.BlockChain;
-import utils.GuiUtils;
-import utils.Miner;
+import javax.swing.Timer;
 import utils.RMI;
 import utils.SecurityUtils;
 
@@ -121,7 +117,7 @@ public class GUI extends javax.swing.JFrame {
             painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(painelServerLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btStartServer)
                 .addContainerGap())
@@ -133,10 +129,10 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btStartServer, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(297, Short.MAX_VALUE))
+                .addContainerGap(466, Short.MAX_VALUE))
         );
 
-        tbPanePrincipal.addTab("Server", painelServer);
+        tbPanePrincipal.addTab("Cliente", painelServer);
 
         jLabel3.setText("De:");
 
@@ -204,31 +200,27 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(painelMovimentosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelMovimentosLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
                     .addComponent(btAtualizarEncomenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
                     .addGroup(painelMovimentosLayout.createSequentialGroup()
                         .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLocalizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(painelMovimentosLayout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txtOrigem, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
-                        .addGap(6, 6, 6)
-                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(painelMovimentosLayout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(140, 140, 140)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(painelMovimentosLayout.createSequentialGroup()
-                                .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtLocalizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))))
+                            .addComponent(txtID))))
                 .addContainerGap())
             .addGroup(painelMovimentosLayout.createSequentialGroup()
                 .addGap(106, 106, 106)
@@ -243,20 +235,20 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelMovimentosLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtLocalizacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtLocalizacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel3)
+                        .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelMovimentosLayout.createSequentialGroup()
-                            .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel6))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel5)
+                            .addGap(28, 28, 28))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btAtualizarEncomenda, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -295,7 +287,7 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(painelUtilizadoresLayout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 134, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
@@ -311,7 +303,7 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 506, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
                 .addContainerGap())
         );
@@ -341,46 +333,6 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDestinoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDestinoActionPerformed
-
-    private void txtLocalizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLocalizacaoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLocalizacaoActionPerformed
-
-    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDActionPerformed
-
-    private void txtOrigemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOrigemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtOrigemActionPerformed
-
-    private void btAtualizarEncomendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualizarEncomendaActionPerformed
-        Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
-        try {
-            if (miner.isMining()) {
-                miner.stopMining(9999);
-            } else {
-                new Thread(() -> {
-                    try {
-                        miner.mine(m.toString(), 3);
-                    } catch (RemoteException ex) {
-                    }
-                }).start();
-            }
-            DefaultListModel model = new DefaultListModel();
-            //adicionar movimentos à lista de movimentos
-            for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
-                model.add(i, miner.getBlockChain().get(i));
-            }
-        listMovimentos.setModel(model);
-        } catch (RemoteException ex) {
-        }
-        
-    }//GEN-LAST:event_btAtualizarEncomendaActionPerformed
-
     private void tbPanePrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tbPanePrincipalStateChanged
         // TODO add your handling code here:
         if (tbPanePrincipal.getSelectedComponent() == painelUtilizadores) {
@@ -406,22 +358,6 @@ public class GUI extends javax.swing.JFrame {
         listEncomendas.setModel(model2);
     }//GEN-LAST:event_listUtilizadoresValueChanged
 
-    private void btGuardarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarBloco1ActionPerformed
-        // TODO add your handling code here:
-        JFileChooser fc = new JFileChooser();
-        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            try {
-                miner.getBlockChain().save(fc.getSelectedFile().getAbsolutePath());
-                byte[] data = SecurityUtils.sign(Files.readAllBytes(Paths.get(fc.getSelectedFile().getAbsolutePath() + ".bc")), (PrivateKey) privatekey);
-                Files.write(Paths.get(fc.getSelectedFile().getName() + ".sign"), data);
-                JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btGuardarBloco1ActionPerformed
-
     private void btCarregarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCarregarBloco1ActionPerformed
         // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();
@@ -440,6 +376,72 @@ public class GUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btCarregarBloco1ActionPerformed
+
+    private void btGuardarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarBloco1ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                miner.getBlockChain().save(fc.getSelectedFile().getAbsolutePath());
+                byte[] data = SecurityUtils.sign(Files.readAllBytes(Paths.get(fc.getSelectedFile().getAbsolutePath() + ".bc")), (PrivateKey) privatekey);
+                Files.write(Paths.get(fc.getSelectedFile().getName() + ".sign"), data);
+                JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btGuardarBloco1ActionPerformed
+
+    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIDActionPerformed
+
+    private void txtLocalizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLocalizacaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLocalizacaoActionPerformed
+
+    private void txtDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDestinoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDestinoActionPerformed
+
+    private void txtOrigemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOrigemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtOrigemActionPerformed
+
+    private void btAtualizarEncomendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualizarEncomendaActionPerformed
+        Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
+        try {
+            if (miner.isMining()) {
+                miner.stopMining(9999);
+            } else {
+                new Thread(() -> {
+                    try {
+                        miner.mine(m.toString(), 3);
+                    } catch (RemoteException ex) {
+                    }
+                }).start();
+            }
+            Timer t = new Timer(250, (ActionEvent e) -> {
+                //Do your Stuff here
+                DefaultListModel model = new DefaultListModel();
+                try {
+                    //adicionar movimentos à lista de movimentos
+                    for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
+                        model.add(i, miner.getBlockChain().get(i));
+                    }
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                listMovimentos.setModel(model);
+            });
+
+            t.start();
+
+        } catch (RemoteException ex) {
+        }
+
+    }//GEN-LAST:event_btAtualizarEncomendaActionPerformed
 
     private void btStartServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStartServerActionPerformed
         try {
