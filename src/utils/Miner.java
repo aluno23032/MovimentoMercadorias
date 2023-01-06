@@ -70,7 +70,7 @@ public class Miner {
         Random rnd = new Random();
         ticket = new AtomicInteger(Math.abs(rnd.nextInt() / 2));
         //configurar os atributos    
-        int numCores = 4;//Runtime.getRuntime().availableProcessors();
+        int numCores = Runtime.getRuntime().availableProcessors();
         threads = new MinerThread[numCores];
         exe = Executors.newFixedThreadPool(numCores);
         //inicializar o globalNonce
