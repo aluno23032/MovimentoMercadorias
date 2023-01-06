@@ -20,7 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////
 package utils;
 
-import utils.Block;
 import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.Random;

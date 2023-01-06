@@ -2,7 +2,6 @@ package trackingEncomendas;
 
 import blockChain.p2p.miner.InterfaceRemoteMiner;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
