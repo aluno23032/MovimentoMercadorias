@@ -3,11 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/trackingEncomendas/GUI.java</file>
-            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/Block.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/trackingEncomendas/GUI_Utilizador.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/account/Register_Distribuidor.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/BlockChain.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/account/Login_Distribuidor.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/SecurityUtils.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/blockChain/p2p/gui/Remote_MinerBlockChain.java</file>
-            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/Miner.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/trackingEncomendas/GUI_Distribuidor.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/blockChain/p2p/miner/ObjectRemoteMiner.java</file>
         </group>
     </open-files>
 </project-private>

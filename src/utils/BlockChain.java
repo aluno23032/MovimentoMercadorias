@@ -67,7 +67,7 @@ public class BlockChain implements Serializable {
     }
 
     public void save(String fileName) throws Exception {
-        try ( ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName + ".bc"))) {
+        try ( ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(chain);
         }
     }
@@ -100,7 +100,7 @@ public class BlockChain implements Serializable {
             List<String> l = new ArrayList<>();
             String user;
             for (Block bloco : chain) {
-                String result = bloco.merkleTree.split("feita por ")[1];
+                String result = bloco.merkleRoot.split("feita por ")[1];
                 result = result.split(" ao fornecedor")[0];
                 user = result;
                 if (!l.contains(user)) {
@@ -115,35 +115,43 @@ public class BlockChain implements Serializable {
     public List<String> getUserEncomendas(String user) {
         List<String> l = new ArrayList<>();
         for (Block bloco : chain) {
-            String result = bloco.merkleTree.split("feita por ")[1];
+            String result = bloco.merkleRoot.split("feita por ")[1];
             result = result.split(" ao fornecedor")[0];
+            String id = bloco.merkleRoot.split("Encomenda n. ")[1];
+            final String id2 = id.split(" feita por")[0];
             if (result.equals(user)) {
                 if (!l.isEmpty()) {
-                    boolean hasOld = false;
-                    for (String entry : l) {
-                        if (entry.contains("1")) {
-                            hasOld = true;
-                        }
-                    }
-                    if (hasOld == true) {
-                        l.removeIf(s -> s.contains("1"));
-                    }
-                    if (!bloco.merkleTree.contains("Recebida")) {
-                        String result2 = bloco.merkleTree.split("Encomenda n. ")[1];
+                    l.removeIf(s -> (s.contains(" " + id2 +" ")));
+                    if (!bloco.merkleRoot.contains("Recebida")) {
+                        String result2 = bloco.merkleRoot.split("Encomenda n. ")[1];
                         result2 = result2.split(" feita por")[0];
-                        String result3 = bloco.merkleTree.split(": ")[1];
+                        String result3 = bloco.merkleRoot.split(": ")[1];
                         result3 = result3.split(" Recebida")[0];
                         l.add("Encomenda n. " + result2 + " : " + result3);
                     }
                 } else {
-                    String result2 = bloco.merkleTree.split("Encomenda n. ")[1];
+                    String result2 = bloco.merkleRoot.split("Encomenda n. ")[1];
                     result2 = result2.split(" feita por")[0];
-                    String result3 = bloco.merkleTree.split(": ")[1];
+                    String result3 = bloco.merkleRoot.split(": ")[1];
                     result3 = result3.split(" Recebida")[0];
                     l.add("Encomenda n. " + result2 + " : " + result3);
                 }
             }
         }
+        return l;
+    }
+    
+    public List<String> getHistoricoEncomenda(int id) {
+        List<String> l = new ArrayList<>();
+        for (Block bloco : chain) {
+            if (bloco.merkleRoot.contains(" " + id +" ")) {
+                    String result2 = bloco.merkleRoot.split("Encomenda n. ")[1];
+                    result2 = result2.split(" feita por")[0];
+                    String result3 = bloco.merkleRoot.split(": ")[1];
+                    result3 = result3.split(" Recebida")[0];
+                    l.add("Encomenda n. " + result2 + " : " + result3);
+                }
+            }
         return l;
     }
 }

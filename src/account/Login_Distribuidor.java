@@ -15,7 +15,7 @@ import utils.SecurityUtils;
  * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
 
-public class Login extends javax.swing.JFrame {
+public class Login_Distribuidor extends javax.swing.JFrame {
 
     String username;
     String password;
@@ -27,7 +27,7 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Register
      */
     
-    public Login() {
+    public Login_Distribuidor() {
         initComponents();
     }
 
@@ -55,16 +55,16 @@ public class Login extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("LOGIN");
+        jLabel3.setText("LOGIN DISTRIBUIDOR");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(102, 102, 102)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(54, 54, 54))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,7 +96,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        btRegister.setText("Register");
+        btRegister.setText("Registar");
         btRegister.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btRegisterMouseClicked(evt);
@@ -203,7 +203,7 @@ public class Login extends javax.swing.JFrame {
                     
                     //Fechar janela e abrir o GUI
                     this.dispose();
-                    new trackingEncomendas.GUI(publickey, privatekey, simetrickey).setVisible(true);
+                    new trackingEncomendas.GUI_Distribuidor(publickey, privatekey, simetrickey).setVisible(true);
                 } catch (Exception exception) {
                     JOptionPane.showMessageDialog(new JFrame(), "Invalid login attempt.", "Warning",
                             JOptionPane.WARNING_MESSAGE);
@@ -213,7 +213,7 @@ public class Login extends javax.swing.JFrame {
                         JOptionPane.WARNING_MESSAGE);
             }
         } catch (HeadlessException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Login_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_btLoginMouseClicked
@@ -221,7 +221,7 @@ public class Login extends javax.swing.JFrame {
     private void btRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btRegisterMouseClicked
         //Fechar janela e abrir a janela de registo
         this.dispose();
-        new Register().setVisible(true);
+        new Register_Distribuidor().setVisible(true);
     }//GEN-LAST:event_btRegisterMouseClicked
 
     private void btRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegisterActionPerformed
@@ -245,20 +245,22 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Login().setVisible(true);
+            new Login_Distribuidor().setVisible(true);
         });
     }
 

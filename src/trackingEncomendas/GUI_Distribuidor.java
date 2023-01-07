@@ -23,7 +23,7 @@ import utils.SecurityUtils;
  *
  * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
-public class GUI extends javax.swing.JFrame {
+public class GUI_Distribuidor extends javax.swing.JFrame {
 
     private static Key loadKeyInicial() throws Exception {
         byte[] data = Files.readAllBytes(Paths.get("edu.priv"));
@@ -49,7 +49,7 @@ public class GUI extends javax.swing.JFrame {
      * @param privatekey
      * @param simetrickey
      */
-    public GUI(Key publickey, Key privatekey, Key simetrickey) {
+    public GUI_Distribuidor(Key publickey, Key privatekey, Key simetrickey) {
         this.privatekey = privatekey;
         initComponents();
     }
@@ -128,10 +128,10 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btStartServer, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(466, Short.MAX_VALUE))
+                .addContainerGap(300, Short.MAX_VALUE))
         );
 
-        tbPanePrincipal.addTab("Cliente", painelServer);
+        tbPanePrincipal.addTab("Server", painelServer);
 
         jLabel3.setText("De:");
 
@@ -302,7 +302,7 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 506, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
                 .addContainerGap())
         );
@@ -322,9 +322,8 @@ public class GUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tbPanePrincipal)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tbPanePrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         tbPanePrincipal.getAccessibleContext().setAccessibleName("");
@@ -339,7 +338,7 @@ public class GUI extends javax.swing.JFrame {
             try {
                 model.addAll(miner.getBlockChain().getUsers());
             } catch (RemoteException ex) {
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
             listUtilizadores.setModel(model);
         }
@@ -352,7 +351,7 @@ public class GUI extends javax.swing.JFrame {
         try {
             model2.addAll(miner.getBlockChain().getUserEncomendas(user));
         } catch (RemoteException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
         }
         listEncomendas.setModel(model2);
     }//GEN-LAST:event_listUtilizadoresValueChanged
@@ -371,7 +370,7 @@ public class GUI extends javax.swing.JFrame {
                 listMovimentos.setModel(model);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btCarregarBloco1ActionPerformed
@@ -387,7 +386,7 @@ public class GUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btGuardarBloco1ActionPerformed
@@ -430,7 +429,7 @@ public class GUI extends javax.swing.JFrame {
                         model.add(i, miner.getBlockChain().get(i));
                     }
                 } catch (RemoteException ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 listMovimentos.setModel(model);
             });
@@ -453,7 +452,7 @@ public class GUI extends javax.swing.JFrame {
                     model.add(i, miner.getBlockChain().get(i));
                 }
             } catch (RemoteException ex) {
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
             listMovimentos.setModel(model);
         } catch (Exception ex) {
@@ -473,19 +472,20 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         //</editor-fold>
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                new GUI(
+                new GUI_Distribuidor(
                         SecurityUtils.loadPublicKey("edu" + ".pub"),
                         loadKeyInicial(),
                         SecurityUtils.loadKey("edu" + ".sim")).setVisible(true);
             } catch (Exception ex) {
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }

@@ -1,15 +1,17 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package trackingEncomendas;
-
 
 import blockChain.p2p.miner.InterfaceRemoteMiner;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import utils.RMI;
 
 /**
  *
- * @author Pedro Martinho a23299
+ * @author Eduardo
  */
 public class GUI_Utilizador extends javax.swing.JFrame {
 
@@ -19,8 +21,9 @@ public class GUI_Utilizador extends javax.swing.JFrame {
     /**
      * Creates new form GUI_Utilizador
      */
-    public GUI_Utilizador() {
+    public GUI_Utilizador(String user) {
         initComponents();
+        this.user = user;
     }
 
     /**
@@ -32,16 +35,59 @@ public class GUI_Utilizador extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        tbPanePrincipal = new javax.swing.JTabbedPane();
+        painelServer = new javax.swing.JPanel();
+        btStartServer = new javax.swing.JButton();
+        txtAddress = new javax.swing.JTextField();
+        painelUtilizadores = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listEncomendas = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        listInformation = new javax.swing.JList<>();
+        listHistory = new javax.swing.JList<>();
+        jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Encomendas");
+        tbPanePrincipal.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tbPanePrincipalStateChanged(evt);
+            }
+        });
+
+        btStartServer.setText("Connect To Server ");
+        btStartServer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btStartServerActionPerformed(evt);
+            }
+        });
+
+        txtAddress.setFont(new java.awt.Font("Courier New", 1, 14)); // NOI18N
+        txtAddress.setText("//10.10.209.111:10010/miner");
+        txtAddress.setBorder(javax.swing.BorderFactory.createTitledBorder("Server Address"));
+
+        javax.swing.GroupLayout painelServerLayout = new javax.swing.GroupLayout(painelServer);
+        painelServer.setLayout(painelServerLayout);
+        painelServerLayout.setHorizontalGroup(
+            painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelServerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btStartServer)
+                .addContainerGap())
+        );
+        painelServerLayout.setVerticalGroup(
+            painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelServerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelServerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btStartServer, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(300, Short.MAX_VALUE))
+        );
+
+        tbPanePrincipal.addTab("Server", painelServer);
 
         listEncomendas.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -50,14 +96,44 @@ public class GUI_Utilizador extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(listEncomendas);
 
-        listInformation.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listInformationValueChanged(evt);
-            }
-        });
-        jScrollPane2.setViewportView(listInformation);
+        jScrollPane2.setViewportView(listHistory);
 
-        jLabel7.setText("Informação");
+        jLabel1.setText("Lista de Encomendas");
+
+        jLabel7.setText("Histórico de localização");
+
+        javax.swing.GroupLayout painelUtilizadoresLayout = new javax.swing.GroupLayout(painelUtilizadores);
+        painelUtilizadores.setLayout(painelUtilizadoresLayout);
+        painelUtilizadoresLayout.setHorizontalGroup(
+            painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelUtilizadoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                    .addGroup(painelUtilizadoresLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        painelUtilizadoresLayout.setVerticalGroup(
+            painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelUtilizadoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelUtilizadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
+        );
+
+        tbPanePrincipal.addTab("Utilizadores", painelUtilizadores);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,49 +141,50 @@ public class GUI_Utilizador extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 87, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tbPanePrincipal)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tbPanePrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btStartServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStartServerActionPerformed
+        try {
+            miner = (InterfaceRemoteMiner) RMI.getRemote(txtAddress.getText());
+            tbPanePrincipal.setSelectedComponent(painelUtilizadores);
+        } catch (Exception ex) {
+        }
+    }//GEN-LAST:event_btStartServerActionPerformed
+
     private void listEncomendasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listEncomendasValueChanged
-        // TODO add your handling code here:
-        user = listEncomendas.getSelectedValue();
+        if (tbPanePrincipal.getSelectedComponent() == painelUtilizadores) {
+            DefaultListModel model = new DefaultListModel();
+            String id = listEncomendas.getSelectedValue().split("Encomenda n. ")[1];
+            id = id.split(" : ")[0];
+            try {
+                model.addAll(miner.getBlockChain().getHistoricoEncomenda(Integer.parseInt(id)));
+            } catch (RemoteException ex) {
+            }
+            listHistory.setModel(model);
+        }
+    }//GEN-LAST:event_listEncomendasValueChanged
+
+    private void tbPanePrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tbPanePrincipalStateChanged
+        if (tbPanePrincipal.getSelectedComponent() == painelUtilizadores) {
         DefaultListModel model2 = new DefaultListModel();
         try {
             model2.addAll(miner.getBlockChain().getUserEncomendas(user));
         } catch (RemoteException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         listEncomendas.setModel(model2);
-    }//GEN-LAST:event_listEncomendasValueChanged
-
-    private void listInformationValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listInformationValueChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_listInformationValueChanged
+        }
+    }//GEN-LAST:event_tbPanePrincipalStateChanged
 
     /**
      * @param args the command line arguments
@@ -139,17 +216,22 @@ public class GUI_Utilizador extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUI_Utilizador().setVisible(true);
+                new GUI_Utilizador("b").setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btStartServer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> listEncomendas;
-    private javax.swing.JList<String> listInformation;
+    private javax.swing.JList<String> listHistory;
+    private javax.swing.JPanel painelServer;
+    private javax.swing.JPanel painelUtilizadores;
+    private javax.swing.JTabbedPane tbPanePrincipal;
+    private javax.swing.JTextField txtAddress;
     // End of variables declaration//GEN-END:variables
 }

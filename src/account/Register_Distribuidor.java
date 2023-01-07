@@ -14,7 +14,7 @@ import utils.SecurityUtils;
  *
  * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
-public class Register extends javax.swing.JFrame {
+public class Register_Distribuidor extends javax.swing.JFrame {
 
     String username;
     String password;
@@ -23,7 +23,7 @@ public class Register extends javax.swing.JFrame {
     /**
      * Creates new form Register
      */
-    public Register() {
+    public Register_Distribuidor() {
         initComponents();
     }
 
@@ -53,23 +53,23 @@ public class Register extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("REGISTER");
+        jLabel3.setText("REGISTAR DISTRIBUIDOR");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(113, 113, 113)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(70, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addGap(68, 68, 68))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jLabel1.setText("Username:");
@@ -88,7 +88,7 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("Confirm password:");
+        jLabel4.setText("Confirmar password:");
 
         txtConfPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,14 +96,14 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
-        btCancel.setText("Cancel");
+        btCancel.setText("Cancelar");
         btCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCancelActionPerformed(evt);
             }
         });
 
-        btRegister.setText("Register");
+        btRegister.setText("Registar");
         btRegister.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btRegisterMouseClicked(evt);
@@ -181,7 +181,7 @@ public class Register extends javax.swing.JFrame {
     private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
         //Fechar janela e abrir a janela de Login
         this.dispose();
-        new Login().setVisible(true);
+        new Login_Distribuidor().setVisible(true);
     }//GEN-LAST:event_btCancelActionPerformed
 
     private void btRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegisterActionPerformed
@@ -189,42 +189,32 @@ public class Register extends javax.swing.JFrame {
     }//GEN-LAST:event_btRegisterActionPerformed
 
     private void btRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btRegisterMouseClicked
-        
         username = txtUsername.getText();
         password = txtPassword.getText();
         conf_password = txtConfPassword.getText();
-        
         //Verificar se a Password e Confirmação de Password são iguais
         if (!password.equals(conf_password)) {
             JOptionPane.showMessageDialog(new JFrame(), "The passwords don't match.", "Warning",JOptionPane.WARNING_MESSAGE);
         } else {
             try {
-                
                 //Gerar chaves
                 KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
                 Key ks = SecurityUtils.generateAESKey(256);
-                
                 //Guardar chave pública
                 SecurityUtils.saveKey(kp.getPublic(), username + ".pub");
-                
                 //Encriptar chave privada
                 byte[] data = SecurityUtils.encrypt(kp.getPrivate().getEncoded(), password);
-                
                 //Guardar chave privada (.priv)
                 Files.write(Paths.get(username + ".priv"), data);
-                
                 //Encriptar chave simétrica
                 data = SecurityUtils.encrypt(ks.getEncoded(), kp.getPublic());
-                
                 //Guardar chave simétrica (.sim)
                 Files.write(Paths.get(username + ".sim"), data);
-                
                 //Fechar janela e abrir janela de login
                 this.dispose();
-                new Login().setVisible(true);
-                
+                new Login_Distribuidor().setVisible(true);
             } catch (Exception ex) {
-                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Register_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -247,19 +237,20 @@ public class Register extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Register.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Register_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Register().setVisible(true);
+            new Register_Distribuidor().setVisible(true);
         });
     }
 
