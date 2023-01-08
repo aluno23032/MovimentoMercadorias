@@ -1,9 +1,9 @@
 package account;
 
+import java.awt.HeadlessException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Key;
-import java.security.KeyPair;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -14,16 +14,20 @@ import utils.SecurityUtils;
  *
  * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
-public class Register_Distribuidor extends javax.swing.JFrame {
+
+public class Login extends javax.swing.JFrame {
 
     String username;
     String password;
-    String conf_password;
+    Key publickey;
+    Key privatekey;
+    Key simetrickey;
 
     /**
      * Creates new form Register
      */
-    public Register_Distribuidor() {
+    
+    public Login() {
         initComponents();
     }
 
@@ -41,11 +45,9 @@ public class Register_Distribuidor extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        btCancel = new javax.swing.JButton();
+        btLogin = new javax.swing.JButton();
         btRegister = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
-        txtConfPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,16 +55,16 @@ public class Register_Distribuidor extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("REGISTAR DISTRIBUIDOR");
+        jLabel3.setText("LOGIN");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(70, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(104, 104, 104)
                 .addComponent(jLabel3)
-                .addGap(68, 68, 68))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -82,12 +84,15 @@ public class Register_Distribuidor extends javax.swing.JFrame {
 
         jLabel2.setText("Password:");
 
-        jLabel4.setText("Confirmar password:");
-
-        btCancel.setText("Cancelar");
-        btCancel.addActionListener(new java.awt.event.ActionListener() {
+        btLogin.setText("Login");
+        btLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btLoginMouseClicked(evt);
+            }
+        });
+        btLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCancelActionPerformed(evt);
+                btLoginActionPerformed(evt);
             }
         });
 
@@ -111,24 +116,17 @@ public class Register_Distribuidor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                                    .addComponent(txtPassword)))
-                            .addComponent(txtConfPassword, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addComponent(btRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPassword)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -145,11 +143,7 @@ public class Register_Distribuidor extends javax.swing.JFrame {
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtConfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btCancel)
+                    .addComponent(btLogin)
                     .addComponent(btRegister))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -161,48 +155,82 @@ public class Register_Distribuidor extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsernameActionPerformed
 
-    private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
-        //Fechar janela e abrir a janela de Login
+    private void btLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoginActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_btLoginActionPerformed
+
+    private void btLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btLoginMouseClicked
+        username = txtUsername.getText();
+        password = txtPassword.getText();
+        System.out.println(password);
+        try {
+            if (Files.exists(Paths.get(username + ".priv"))) {
+                try {
+                    
+                    //Carregar Public Key
+                    publickey = SecurityUtils.loadPublicKey(username + ".pub");
+                    
+                    //Ler ficheiro da chave privada
+                    byte[] data = Files.readAllBytes(Paths.get(username + ".priv"));
+                    
+                    //Decriptar ficheiro com password
+                    data = SecurityUtils.decrypt(data, password);
+                    
+                    //Guardar chave privada decriptada num ficheiro temporário
+                    Files.write(Paths.get("temp.priv"), data);
+                    
+                    //Carregar a chave privada (Key) a partir do ficheiro temporário
+                    privatekey = SecurityUtils.loadPrivateKey("temp.priv");
+                    
+                    //Eliminar ficheiro temporário
+                    Files.deleteIfExists(Paths.get("temp.priv"));
+                    
+                    //Ler ficheiro da chave simétrica
+                    data = Files.readAllBytes(Paths.get(username + ".sim"));
+                    
+                    //Decriptar ficheiro com a chave privada
+                    data = SecurityUtils.decrypt(data, privatekey);
+                    
+                    //Guardar chave simétrica num ficheiro temporário
+                    Files.write(Paths.get("temp.sim"), data);
+                    
+                    //Carregar a chave simétrica (Key) a partir do ficheiro temporário
+                    simetrickey = SecurityUtils.loadAESKey("temp.sim");
+                    
+                    //Eliminar ficheiro temporário
+                    Files.deleteIfExists(Paths.get("temp.sim"));
+                    
+                    //Fechar janela e abrir o GUI
+                    this.dispose();
+                    if (Files.exists(Paths.get(username + ".dis"))) {
+                        new trackingEncomendas.GUI_Distribuidor(publickey, privatekey, simetrickey).setVisible(true);
+                    } else {
+                        new trackingEncomendas.GUI_Utilizador(username).setVisible(true);
+                    }
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(new JFrame(), "Invalid login attempt.", "Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "There is no user with this username.", "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (HeadlessException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btLoginMouseClicked
+
+    private void btRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btRegisterMouseClicked
+        //Fechar janela e abrir a janela de registo
         this.dispose();
-        new Login().setVisible(true);
-    }//GEN-LAST:event_btCancelActionPerformed
+        new Register_Distribuidor().setVisible(true);
+    }//GEN-LAST:event_btRegisterMouseClicked
 
     private void btRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegisterActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btRegisterActionPerformed
-
-    private void btRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btRegisterMouseClicked
-        username = txtUsername.getText();
-        password = txtPassword.getText();
-        conf_password = txtConfPassword.getText();
-        //Verificar se a Password e Confirmação de Password são iguais
-        if (!password.equals(conf_password)) {
-            JOptionPane.showMessageDialog(new JFrame(), "The passwords don't match.", "Warning",JOptionPane.WARNING_MESSAGE);
-        } else {
-            try {
-                //Gerar chaves
-                KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
-                Key ks = SecurityUtils.generateAESKey(256);
-                //Guardar chave pública
-                SecurityUtils.saveKey(kp.getPublic(), username + ".pub");
-                //Encriptar chave privada
-                byte[] data = SecurityUtils.encrypt(kp.getPrivate().getEncoded(), password);
-                //Guardar chave privada (.priv)
-                Files.write(Paths.get(username + ".priv"), data);
-                //Encriptar chave simétrica
-                data = SecurityUtils.encrypt(ks.getEncoded(), kp.getPublic());
-                //Guardar chave simétrica (.sim)
-                Files.write(Paths.get(username + ".sim"), data);
-                Files.write(Paths.get(username + ".dis"), data);
-                //Fechar janela e abrir janela de login
-                this.dispose();
-                new Login().setVisible(true);
-            } catch (Exception ex) {
-                Logger.getLogger(Register_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    }//GEN-LAST:event_btRegisterMouseClicked
 
     /**
      * @param args the command line arguments
@@ -221,32 +249,36 @@ public class Register_Distribuidor extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Register_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Register_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Register_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Register_Distribuidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Register_Distribuidor().setVisible(true);
+            new Login().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btCancel;
+    private javax.swing.JButton btLogin;
     private javax.swing.JButton btRegister;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField txtConfPassword;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
