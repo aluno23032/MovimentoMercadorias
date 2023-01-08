@@ -11,6 +11,11 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Eduardo Gomes a23032 e Pedro Martinho a23299
+ */
+
 public class BlockChain implements Serializable {
 
     ArrayList<Block> chain = new ArrayList<>();

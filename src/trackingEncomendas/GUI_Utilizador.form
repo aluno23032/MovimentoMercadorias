@@ -105,11 +105,11 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="painelUtilizadores">
+        <Container class="javax.swing.JPanel" name="painelEncomendas">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Utilizadores">
-                <Property name="tabTitle" type="java.lang.String" value="Utilizadores"/>
+              <JTabbedPaneConstraints tabName="Encomendas">
+                <Property name="tabTitle" type="java.lang.String" value="Encomendas"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

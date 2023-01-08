@@ -23,6 +23,7 @@ import utils.MiningListener;
  *
  * @author IPT - computer
  */
+
 public interface ListenerRemoteMiner extends MiningListener {
 
     public void onStart(ObjectRemoteMiner rm);

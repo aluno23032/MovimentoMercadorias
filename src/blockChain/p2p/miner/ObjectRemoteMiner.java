@@ -31,17 +31,28 @@ import java.util.logging.Logger;
  *
  * @author aluno
  */
+
 public class ObjectRemoteMiner extends UnicastRemoteObject implements InterfaceRemoteMiner {
 
     private final String BLOCHCHAIN_FILE = "blockchain.bck";
-
-    private ListenerRemoteMiner listener; // listener
-    private Miner miner; //objeto para minar
-    private List<InterfaceRemoteMiner> network; // network of miners
-    private String address; // nome do servidor
-
-    private BlockChain chain; // blockchain
-    private Block incompleteBlock; //
+    
+    //listener
+    private ListenerRemoteMiner listener; 
+    
+    //objeto para minar
+    private Miner miner; 
+    
+    //network of miners
+    private List<InterfaceRemoteMiner> network; 
+    
+    //nome do servidor
+    private String address; 
+    
+    //blockchain
+    private BlockChain chain; 
+    
+    //bloco incompleto
+    private Block incompleteBlock;
 
     /**
      * constructor
@@ -50,19 +61,26 @@ public class ObjectRemoteMiner extends UnicastRemoteObject implements InterfaceR
      * @param listener
      * @throws RemoteException
      */
+    
     public ObjectRemoteMiner(int port, ListenerRemoteMiner listener) throws RemoteException {
+        
         //passar a porta para superclasse
         super(port);
         try {
             this.listener = listener;
+            
             //criar um mineiro
             miner = new Miner(listener);
+            
             //criar a lista da rede
             network = new CopyOnWriteArrayList<>();
+            
             //atualizar o endereço do objeto remoto
             address = "//" + InetAddress.getLocalHost().getHostAddress() + ":" + port + "/" + InterfaceRemoteMiner.NAME;
-            // blochain
+            
+            //blochain
             chain = new BlockChain();
+            
             try {
                 chain.load(BLOCHCHAIN_FILE);
             } catch (Exception e) {
@@ -75,7 +93,8 @@ public class ObjectRemoteMiner extends UnicastRemoteObject implements InterfaceR
         } catch (UnknownHostException e) {
             address = "unknow" + ":" + port;
         }
-        //:::::::::: Notificar o listener ::::::::::::::
+        
+        //notificar o listener
         if (listener != null) {
             listener.onStart(this);
         }
@@ -211,12 +230,11 @@ public class ObjectRemoteMiner extends UnicastRemoteObject implements InterfaceR
     //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
     //:::::                                                         :::::::::::::
-    //:::::                M I N A R       B L O C O S 
+    //:::::                M I N A R       B L O C O S              :::::::::::::
     //:::::                                                         :::::::::::::
     //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
-    //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::    
+    //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::      
     /**
      * calculate the nonce of the mssage
      *
@@ -261,7 +279,7 @@ public class ObjectRemoteMiner extends UnicastRemoteObject implements InterfaceR
             for (InterfaceRemoteMiner remote : network) {
                 remote.startMining(message, zeros);
             }
-            //:::::::::: Notificar o listener ::::::::::::::
+            //notificar o listener
             listener.onStartMining(message, zeros);
 
         } catch (Exception ex) {
@@ -282,7 +300,7 @@ public class ObjectRemoteMiner extends UnicastRemoteObject implements InterfaceR
             try {
                 //parar o mineiro
                 miner.stopMining(nonce);
-                //:::::::::: Notificar o listener ::::::::::::::
+                //notificar o listener
                 listener.onStopMining(nonce);
                 listener.onMessage("Stop My Miner", getAdress());
                 incompleteBlock.setNonce(nonce);
@@ -307,7 +325,7 @@ public class ObjectRemoteMiner extends UnicastRemoteObject implements InterfaceR
 
     //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //:::::                                                         :::::::::::::
-    //:::::                BLOCKCHAIN 
+    //:::::                         BLOCKCHAIN                      :::::::::::::            
     //:::::                                                         :::::::::::::
     //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     @Override

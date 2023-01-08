@@ -31,13 +31,15 @@ import javax.swing.DefaultListModel;
  *
  * @author IPT
  */
+
 public class Remote_MinerBlockChain extends javax.swing.JFrame implements ListenerRemoteMiner {
 
     ObjectRemoteMiner miner = null;
 
     /**
-     * Creates new form Test03_GUI_miner
+     * Creates new form Remote_MinerBlock
      */
+    
     public Remote_MinerBlockChain() {
         initComponents();
         setLocationRelativeTo(null);

@@ -14,6 +14,7 @@ import utils.SecurityUtils;
  *
  * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
+
 public class Register_Distribuidor extends javax.swing.JFrame {
 
     String username;
@@ -175,6 +176,7 @@ public class Register_Distribuidor extends javax.swing.JFrame {
         username = txtUsername.getText();
         password = txtPassword.getText();
         conf_password = txtConfPassword.getText();
+        
         //Verificar se a Password e Confirmação de Password são iguais
         if (!password.equals(conf_password)) {
             JOptionPane.showMessageDialog(new JFrame(), "The passwords don't match.", "Warning",JOptionPane.WARNING_MESSAGE);
@@ -183,20 +185,27 @@ public class Register_Distribuidor extends javax.swing.JFrame {
                 //Gerar chaves
                 KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
                 Key ks = SecurityUtils.generateAESKey(256);
+                
                 //Guardar chave pública
                 SecurityUtils.saveKey(kp.getPublic(), username + ".pub");
+                
                 //Encriptar chave privada
                 byte[] data = SecurityUtils.encrypt(kp.getPrivate().getEncoded(), password);
+                
                 //Guardar chave privada (.priv)
                 Files.write(Paths.get(username + ".priv"), data);
+                
                 //Encriptar chave simétrica
                 data = SecurityUtils.encrypt(ks.getEncoded(), kp.getPublic());
-                //Guardar chave simétrica (.sim)
+                
+                //Guardar chave simétrica (.sim) e um ficheiro indicativo de User "Ditribuidor"
                 Files.write(Paths.get(username + ".sim"), data);
                 Files.write(Paths.get(username + ".dis"), data);
-                //Fechar janela e abrir janela de login
+                
+                //Fechar janela de registo e abrir janela de login
                 this.dispose();
                 new Login().setVisible(true);
+                
             } catch (Exception ex) {
                 Logger.getLogger(Register_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }

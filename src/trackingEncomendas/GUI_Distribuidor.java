@@ -23,16 +23,23 @@ import utils.SecurityUtils;
  *
  * @author Eduardo Gomes a23032 e Pedro Martinho a23299
  */
+
 public class GUI_Distribuidor extends javax.swing.JFrame {
 
     private static Key loadKeyInicial() throws Exception {
+        
+        //ler ficheiro .priv
         byte[] data = Files.readAllBytes(Paths.get("edu.priv"));
+        
         //Decriptar ficheiro com password
         data = SecurityUtils.decrypt(data, "edu");
+        
         //Guardar chave privada decriptada num ficheiro temporário
         Files.write(Paths.get("temp.priv"), data);
+        
         //Carregar a chave privada (Key) a partir do ficheiro temporário
         PrivateKey chavetemp = SecurityUtils.loadPrivateKey("temp.priv");
+        
         //Eliminar ficheiro temporário
         Files.deleteIfExists(Paths.get("temp.priv"));
         return chavetemp;
@@ -109,6 +116,11 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
         txtAddress.setFont(new java.awt.Font("Courier New", 1, 14)); // NOI18N
         txtAddress.setText("//10.10.209.111:10010/miner");
         txtAddress.setBorder(javax.swing.BorderFactory.createTitledBorder("Server Address"));
+        txtAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAddressActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout painelServerLayout = new javax.swing.GroupLayout(painelServer);
         painelServer.setLayout(painelServerLayout);
@@ -224,9 +236,9 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
             .addGroup(painelMovimentosLayout.createSequentialGroup()
                 .addGap(106, 106, 106)
                 .addComponent(btGuardarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btCarregarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(107, 107, 107))
         );
         painelMovimentosLayout.setVerticalGroup(
             painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,41 +344,56 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbPanePrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tbPanePrincipalStateChanged
-        // TODO add your handling code here:
+        //se o painel principal for selecionado
         if (tbPanePrincipal.getSelectedComponent() == painelUtilizadores) {
             DefaultListModel model = new DefaultListModel();
             try {
+                
+                //adicionar users ao model
                 model.addAll(miner.getBlockChain().getUsers());
+                
             } catch (RemoteException ex) {
                 Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            //mostrar o model na lista de users
             listUtilizadores.setModel(model);
         }
     }//GEN-LAST:event_tbPanePrincipalStateChanged
 
     private void listUtilizadoresValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listUtilizadoresValueChanged
-        // TODO add your handling code here:
+        //guardar user que e selecionado
         user = listUtilizadores.getSelectedValue();
+        
         DefaultListModel model2 = new DefaultListModel();
         try {
+            
+            //adicionar encomendas do user ao model
             model2.addAll(miner.getBlockChain().getUserEncomendas(user));
+            
         } catch (RemoteException ex) {
             Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        //mostrar o model na lista das encomendas
         listEncomendas.setModel(model2);
     }//GEN-LAST:event_listUtilizadoresValueChanged
 
     private void btCarregarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCarregarBloco1ActionPerformed
-        // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
+                
+                //load da blockchain
                 miner.getBlockChain().load(fc.getSelectedFile().getAbsolutePath());
                 DefaultListModel model = new DefaultListModel();
-                //adicionar movimentos à lista de movimentos
+                
+                //adicionar movimentos ao model
                 for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
                     model.add(i, miner.getBlockChain().get(i).getData());
                 }
+                
+                //mostar o model na lista de movimentos
                 listMovimentos.setModel(model);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -376,12 +403,17 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
     }//GEN-LAST:event_btCarregarBloco1ActionPerformed
 
     private void btGuardarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarBloco1ActionPerformed
-        // TODO add your handling code here:
         JFileChooser fc = new JFileChooser();
         if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
+                
+                //guardar blockchain 
                 miner.getBlockChain().save(fc.getSelectedFile().getAbsolutePath());
+                
+                //assinar bloco com a chave privada do user
                 byte[] data = SecurityUtils.sign(Files.readAllBytes(Paths.get(fc.getSelectedFile().getAbsolutePath() + ".bc")), (PrivateKey) privatekey);
+                
+                //escrever os dados do bloco assinado num ficheiro .sign
                 Files.write(Paths.get(fc.getSelectedFile().getName() + ".sign"), data);
                 JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
@@ -408,29 +440,41 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtOrigemActionPerformed
 
     private void btAtualizarEncomendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualizarEncomendaActionPerformed
+        //novo movimento
         Movimento m = new Movimento(txtOrigem.getText(), txtDestino.getText(), txtLocalizacao.getText(), Integer.parseInt(txtID.getText()), LocalDateTime.now(ZoneId.of("GMT")));
         try {
+            
+            //se o mineiro estiver a minar 
             if (miner.isMining()) {
+                
+                //parar o mineiro
                 miner.stopMining(9999);
+                
             } else {
                 new Thread(() -> {
                     try {
+                        
+                        //minar
                         miner.mine(m.toString(), 3);
+                        
                     } catch (RemoteException ex) {
                     }
                 }).start();
             }
             Timer t = new Timer(250, (ActionEvent e) -> {
-                //Do your Stuff here
                 DefaultListModel model = new DefaultListModel();
                 try {
-                    //adicionar movimentos à lista de movimentos
+                    
+                    //adicionar movimentos ao model
                     for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
                         model.add(i, miner.getBlockChain().get(i));
                     }
+                    
                 } catch (RemoteException ex) {
                     Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                //mostrar o model na lista de movimentos
                 listMovimentos.setModel(model);
             });
 
@@ -443,21 +487,35 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
 
     private void btStartServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStartServerActionPerformed
         try {
+            
+            //guardar endereço do remote miner
             miner = (InterfaceRemoteMiner) RMI.getRemote(txtAddress.getText());
+            
+            //seleceionar o painel de movimentos
             tbPanePrincipal.setSelectedComponent(painelMovimentos);
+            
             DefaultListModel model = new DefaultListModel();
             try {
-                //adicionar movimentos à lista de movimentos
+                
+                //adicionar movimentos ao model
                 for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
                     model.add(i, miner.getBlockChain().get(i));
                 }
+                
             } catch (RemoteException ex) {
                 Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            //mostar o model na lista de movimentos
             listMovimentos.setModel(model);
+            
         } catch (Exception ex) {
         }
     }//GEN-LAST:event_btStartServerActionPerformed
+
+    private void txtAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAddressActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAddressActionPerformed
 
     /**
      * @param args the command line arguments

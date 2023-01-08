@@ -52,9 +52,9 @@ public interface InterfaceRemoteMiner extends Remote {
     //:::::                                                         :::::::::::::
     //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     /**
-     * calculate the nonce of the mssage
+     * calculate the nonce of the message
      *
-     * @param message messagem
+     * @param message message
      * @param zeros number of zeros
      * @return nonce
      * @throws RemoteException
@@ -97,7 +97,7 @@ public interface InterfaceRemoteMiner extends Remote {
      /**
      * gets the message of miner
      *
-     * @return messag
+     * @return message
      * @throws RemoteException
      */
     public String getMessage() throws RemoteException;
@@ -111,9 +111,9 @@ public interface InterfaceRemoteMiner extends Remote {
     public int getTicketNumber() throws RemoteException;
 
     /**
-     * gets the adress of the remote object
+     * gets the address of the remote object
      *
-     * @return adress of the remote object
+     * @return address of the remote object
      * @throws java.rmi.RemoteException
      */
     public String getHash() throws RemoteException;
