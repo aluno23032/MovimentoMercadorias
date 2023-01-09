@@ -2,22 +2,14 @@ package trackingEncomendas;
 
 import blockChain.p2p.miner.InterfaceRemoteMiner;
 import java.awt.event.ActionEvent;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.rmi.RemoteException;
-import java.security.Key;
-import java.security.PrivateKey;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import utils.RMI;
-import utils.SecurityUtils;
 
 /**
  *
@@ -26,38 +18,13 @@ import utils.SecurityUtils;
 
 public class GUI_Distribuidor extends javax.swing.JFrame {
 
-    private static Key loadKeyInicial() throws Exception {
-        
-        //ler ficheiro .priv
-        byte[] data = Files.readAllBytes(Paths.get("edu.priv"));
-        
-        //Decriptar ficheiro com password
-        data = SecurityUtils.decrypt(data, "edu");
-        
-        //Guardar chave privada decriptada num ficheiro temporário
-        Files.write(Paths.get("temp.priv"), data);
-        
-        //Carregar a chave privada (Key) a partir do ficheiro temporário
-        PrivateKey chavetemp = SecurityUtils.loadPrivateKey("temp.priv");
-        
-        //Eliminar ficheiro temporário
-        Files.deleteIfExists(Paths.get("temp.priv"));
-        return chavetemp;
-    }
-
     InterfaceRemoteMiner miner;
-    Key privatekey;
     String user;
 
     /**
      * Creates new form GUI
-     *
-     * @param publickey
-     * @param privatekey
-     * @param simetrickey
      */
-    public GUI_Distribuidor(Key publickey, Key privatekey, Key simetrickey) {
-        this.privatekey = privatekey;
+    public GUI_Distribuidor() {
         initComponents();
     }
 
@@ -87,8 +54,6 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         listMovimentos = new javax.swing.JList<>();
-        btGuardarBloco1 = new javax.swing.JButton();
-        btCarregarBloco1 = new javax.swing.JButton();
         painelUtilizadores = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listUtilizadores = new javax.swing.JList<>();
@@ -188,22 +153,6 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(listMovimentos);
 
-        btGuardarBloco1.setText("Guardar");
-        btGuardarBloco1.setToolTipText("");
-        btGuardarBloco1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btGuardarBloco1ActionPerformed(evt);
-            }
-        });
-
-        btCarregarBloco1.setText("Carregar");
-        btCarregarBloco1.setToolTipText("");
-        btCarregarBloco1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCarregarBloco1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout painelMovimentosLayout = new javax.swing.GroupLayout(painelMovimentos);
         painelMovimentos.setLayout(painelMovimentosLayout);
         painelMovimentosLayout.setHorizontalGroup(
@@ -233,12 +182,6 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtID))))
                 .addContainerGap())
-            .addGroup(painelMovimentosLayout.createSequentialGroup()
-                .addGap(106, 106, 106)
-                .addComponent(btGuardarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btCarregarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(107, 107, 107))
         );
         painelMovimentosLayout.setVerticalGroup(
             painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,12 +208,8 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(painelMovimentosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btGuardarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btCarregarBloco1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tbPanePrincipal.addTab("Movimento", painelMovimentos);
@@ -378,50 +317,6 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
         //mostrar o model na lista das encomendas
         listEncomendas.setModel(model2);
     }//GEN-LAST:event_listUtilizadoresValueChanged
-
-    private void btCarregarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCarregarBloco1ActionPerformed
-        JFileChooser fc = new JFileChooser();
-        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            try {
-                
-                //load da blockchain
-                miner.getBlockChain().load(fc.getSelectedFile().getAbsolutePath());
-                DefaultListModel model = new DefaultListModel();
-                
-                //adicionar movimentos ao model
-                for (int i = 0; i < miner.getBlockChain().getLength(); i++) {
-                    model.add(i, miner.getBlockChain().get(i).getData());
-                }
-                
-                //mostar o model na lista de movimentos
-                listMovimentos.setModel(model);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-                Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btCarregarBloco1ActionPerformed
-
-    private void btGuardarBloco1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarBloco1ActionPerformed
-        JFileChooser fc = new JFileChooser();
-        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            try {
-                
-                //guardar blockchain 
-                miner.getBlockChain().save(fc.getSelectedFile().getAbsolutePath());
-                
-                //assinar bloco com a chave privada do user
-                byte[] data = SecurityUtils.sign(Files.readAllBytes(Paths.get(fc.getSelectedFile().getAbsolutePath() + ".bc")), (PrivateKey) privatekey);
-                
-                //escrever os dados do bloco assinado num ficheiro .sign
-                Files.write(Paths.get(fc.getSelectedFile().getName() + ".sign"), data);
-                JOptionPane.showMessageDialog(new JFrame(), "O ficheiro foi salvo com sucesso.", "Salvo", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-                Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btGuardarBloco1ActionPerformed
 
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
         // TODO add your handling code here:
@@ -538,10 +433,7 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
         //</editor-fold>
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                new GUI_Distribuidor(
-                        SecurityUtils.loadPublicKey("edu" + ".pub"),
-                        loadKeyInicial(),
-                        SecurityUtils.loadKey("edu" + ".sim")).setVisible(true);
+                new GUI_Distribuidor().setVisible(true);
             } catch (Exception ex) {
                 Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -550,8 +442,6 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAtualizarEncomenda;
-    private javax.swing.JButton btCarregarBloco1;
-    private javax.swing.JButton btGuardarBloco1;
     private javax.swing.JButton btStartServer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

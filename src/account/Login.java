@@ -19,9 +19,7 @@ public class Login extends javax.swing.JFrame {
 
     String username;
     String password;
-    Key publickey;
     Key privatekey;
-    Key simetrickey;
 
     /**
      * Creates new form Register
@@ -168,9 +166,6 @@ public class Login extends javax.swing.JFrame {
             if (Files.exists(Paths.get(username + ".priv"))) {
                 try {
                     
-                    //Carregar Public Key
-                    publickey = SecurityUtils.loadPublicKey(username + ".pub");
-                    
                     //Ler ficheiro da chave privada
                     byte[] data = Files.readAllBytes(Paths.get(username + ".priv"));
                     
@@ -195,16 +190,13 @@ public class Login extends javax.swing.JFrame {
                     //Guardar chave simétrica num ficheiro temporário
                     Files.write(Paths.get("temp.sim"), data);
                     
-                    //Carregar a chave simétrica (Key) a partir do ficheiro temporário
-                    simetrickey = SecurityUtils.loadAESKey("temp.sim");
-                    
                     //Eliminar ficheiro temporário
                     Files.deleteIfExists(Paths.get("temp.sim"));
                     
                     //Fechar janela e abrir o GUI
                     this.dispose();
                     if (Files.exists(Paths.get(username + ".dis"))) {
-                        new trackingEncomendas.GUI_Distribuidor(publickey, privatekey, simetrickey).setVisible(true);
+                        new trackingEncomendas.GUI_Distribuidor().setVisible(true);
                     } else {
                         new trackingEncomendas.GUI_Utilizador(username).setVisible(true);
                     }
@@ -248,15 +240,18 @@ public class Login extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
