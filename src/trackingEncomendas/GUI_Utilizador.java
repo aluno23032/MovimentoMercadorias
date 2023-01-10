@@ -231,10 +231,8 @@ public class GUI_Utilizador extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI_Utilizador("b").setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new GUI_Utilizador("José").setVisible(true);
         });
     }
 

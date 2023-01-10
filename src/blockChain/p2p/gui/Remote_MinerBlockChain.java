@@ -25,6 +25,8 @@ import utils.RMI;
 import blockChain.p2p.miner.ObjectRemoteMiner;
 import blockChain.p2p.miner.InterfaceRemoteMiner;
 import blockChain.p2p.miner.ListenerRemoteMiner;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import javax.swing.DefaultListModel;
 
 /**
@@ -78,9 +80,6 @@ public class Remote_MinerBlockChain extends javax.swing.JFrame implements Listen
         txtHash = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtMessage = new javax.swing.JTextArea();
-        tpBlockchain = new javax.swing.JTabbedPane();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        txtLeger = new javax.swing.JTextArea();
         pnBlockChain = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         lstBlockchain = new javax.swing.JList<>();
@@ -267,13 +266,6 @@ public class Remote_MinerBlockChain extends javax.swing.JFrame implements Listen
 
         tpMain.addTab("Miner", pnMiner);
 
-        txtLeger.setColumns(20);
-        txtLeger.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
-        txtLeger.setRows(5);
-        jScrollPane4.setViewportView(txtLeger);
-
-        tpBlockchain.addTab("Ledger", jScrollPane4);
-
         pnBlockChain.setLayout(new java.awt.BorderLayout());
 
         jScrollPane5.setPreferredSize(new java.awt.Dimension(200, 146));
@@ -303,9 +295,7 @@ public class Remote_MinerBlockChain extends javax.swing.JFrame implements Listen
 
         pnBlockChain.add(jScrollPane6, java.awt.BorderLayout.CENTER);
 
-        tpBlockchain.addTab("BlockChainExplorer", pnBlockChain);
-
-        tpMain.addTab("BlockChain", tpBlockchain);
+        tpMain.addTab("BlockChainExplorer", pnBlockChain);
 
         jSplitPane1.setLeftComponent(tpMain);
 
@@ -321,7 +311,7 @@ public class Remote_MinerBlockChain extends javax.swing.JFrame implements Listen
             RMI.startRemoteObject(miner, port, InterfaceRemoteMiner.NAME);
             txtAddress.setText(miner.getAdress());
             this.setTitle(miner.getAdress());
-        } catch (Exception ex) {
+        } catch (MalformedURLException | UnknownHostException | RemoteException ex) {
             onException("Start Server", ex);
         }
     }//GEN-LAST:event_btStartServerActionPerformed
@@ -619,10 +609,8 @@ public class Remote_MinerBlockChain extends javax.swing.JFrame implements Listen
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Remote_MinerBlockChain().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Remote_MinerBlockChain().setVisible(true);
         });
     }
 
@@ -636,7 +624,6 @@ public class Remote_MinerBlockChain extends javax.swing.JFrame implements Listen
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSplitPane jSplitPane1;
@@ -648,12 +635,10 @@ public class Remote_MinerBlockChain extends javax.swing.JFrame implements Listen
     private javax.swing.JPanel pnStartServer1;
     private javax.swing.JSpinner spMyServerPort;
     private javax.swing.JSpinner spZeros;
-    private javax.swing.JTabbedPane tpBlockchain;
     private javax.swing.JTabbedPane tpMain;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextArea txtBlock;
     private javax.swing.JTextField txtHash;
-    private javax.swing.JTextArea txtLeger;
     private javax.swing.JTextPane txtLog;
     private javax.swing.JTextArea txtMessage;
     private javax.swing.JTextArea txtNetwork;
@@ -739,7 +724,7 @@ public class Remote_MinerBlockChain extends javax.swing.JFrame implements Listen
         try {
             StringBuilder txt = new StringBuilder();
             for (InterfaceRemoteMiner m : miner.getNetwork()) {
-                txt.append(m.getAdress() + "\n");
+                txt.append(m.getAdress()).append("\n");
             }
             txtNetwork.setText(txt.toString().trim());
         } catch (RemoteException ex) {
