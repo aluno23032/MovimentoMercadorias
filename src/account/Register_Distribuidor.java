@@ -47,6 +47,7 @@ public class Register_Distribuidor extends javax.swing.JFrame {
         btRegister = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
         txtConfPassword = new javax.swing.JPasswordField();
+        btCancel1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,6 +105,13 @@ public class Register_Distribuidor extends javax.swing.JFrame {
             }
         });
 
+        btCancel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/account/pngfind.com-copyright-png-938050.png"))); // NOI18N
+        btCancel1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancel1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,7 +121,8 @@ public class Register_Distribuidor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btCancel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -151,7 +160,8 @@ public class Register_Distribuidor extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btCancel)
-                    .addComponent(btRegister))
+                    .addComponent(btRegister)
+                    .addComponent(btCancel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -176,7 +186,7 @@ public class Register_Distribuidor extends javax.swing.JFrame {
         username = txtUsername.getText();
         password = txtPassword.getText();
         conf_password = txtConfPassword.getText();
-        
+
         //Verificar se a Password e Confirmação de Password são iguais
         if (!password.equals(conf_password)) {
             JOptionPane.showMessageDialog(new JFrame(), "The passwords don't match.", "Warning",JOptionPane.WARNING_MESSAGE);
@@ -185,33 +195,38 @@ public class Register_Distribuidor extends javax.swing.JFrame {
                 //Gerar chaves
                 KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
                 Key ks = SecurityUtils.generateAESKey(256);
-                
+
                 //Guardar chave pública
                 SecurityUtils.saveKey(kp.getPublic(), username + ".pub");
-                
+
                 //Encriptar chave privada
                 byte[] data = SecurityUtils.encrypt(kp.getPrivate().getEncoded(), password);
-                
+
                 //Guardar chave privada (.priv)
                 Files.write(Paths.get(username + ".priv"), data);
-                
+
                 //Encriptar chave simétrica
                 data = SecurityUtils.encrypt(ks.getEncoded(), kp.getPublic());
-                
+
                 //Guardar chave simétrica (.sim) e um ficheiro indicativo de User "Ditribuidor"
                 Files.write(Paths.get(username + ".sim"), data);
                 Files.write(Paths.get(username + ".dis"), data);
-                
+
                 //Fechar janela de registo e abrir janela de login
                 this.dispose();
                 new Login().setVisible(true);
-                
+
             } catch (Exception ex) {
                 Logger.getLogger(Register_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }//GEN-LAST:event_btRegisterMouseClicked
+
+    private void btCancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancel1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new Register_Utilizador().setVisible(true);
+    }//GEN-LAST:event_btCancel1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,6 +264,7 @@ public class Register_Distribuidor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCancel;
+    private javax.swing.JButton btCancel1;
     private javax.swing.JButton btRegister;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
