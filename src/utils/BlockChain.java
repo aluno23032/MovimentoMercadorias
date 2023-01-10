@@ -117,7 +117,7 @@ public class BlockChain implements Serializable {
         return null;
     }
 
-    public List<String> getUserEncomendas(String user) {
+    public List<String> getUserEncomendas(String user, String tipo) {
         List<String> l = new ArrayList<>();
         for (Block bloco : chain) {
             String result = bloco.merkleRoot.split("feita por ")[1];
@@ -132,14 +132,23 @@ public class BlockChain implements Serializable {
                         result2 = result2.split(" feita por")[0];
                         String result3 = bloco.merkleRoot.split(": ")[1];
                         result3 = result3.split(" Recebida")[0];
-                        l.add("Encomenda n. " + result2 + " : " + result3);
+                        if (tipo.equals("d")) {
+                            l.add("Encomenda n. " + result2 + " : " + result3);
+                        } else {
+                            l.add("Encomenda n. " + result2);
+                        }
+                        
                     }
                 } else {
                     String result2 = bloco.merkleRoot.split("Encomenda n. ")[1];
                     result2 = result2.split(" feita por")[0];
                     String result3 = bloco.merkleRoot.split(": ")[1];
                     result3 = result3.split(" Recebida")[0];
-                    l.add("Encomenda n. " + result2 + " : " + result3);
+                    if (tipo.equals("d")) {
+                        l.add("Encomenda n. " + result2 + " : " + result3);
+                    } else {
+                        l.add("Encomenda n. " + result2);
+                    }
                 }
             }
         }
@@ -150,11 +159,9 @@ public class BlockChain implements Serializable {
         List<String> l = new ArrayList<>();
         for (Block bloco : chain) {
             if (bloco.merkleRoot.contains(" " + id +" ")) {
-                    String result2 = bloco.merkleRoot.split("Encomenda n. ")[1];
-                    result2 = result2.split(" feita por")[0];
-                    String result3 = bloco.merkleRoot.split(": ")[1];
-                    result3 = result3.split(" Recebida")[0];
-                    l.add("Encomenda n. " + result2 + " : " + result3);
+                    String result = bloco.merkleRoot.split(": ")[1];
+                    result = result.split(" Recebida")[0];
+                    l.add(result);
                 }
             }
         return l;

@@ -1,6 +1,7 @@
 package trackingEncomendas;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Movimento {
 
@@ -8,7 +9,7 @@ public class Movimento {
     private String to;
     private String current;
     private int idEncomenda;
-    private LocalDateTime tempoChegada;
+    private LocalDateTime horaChegada;
     private boolean recebido;
 
     
@@ -18,7 +19,7 @@ public class Movimento {
         this.to = to;
         this.current = current;
         this.idEncomenda = id;
-        this.tempoChegada = tempo;
+        this.horaChegada = tempo;
         this.recebido = false;
     }
 
@@ -63,13 +64,13 @@ public class Movimento {
     }
 
     //get tempo de chegada esperado
-    public LocalDateTime getTempoChegada() {
-        return tempoChegada;
+    public LocalDateTime getHoraChegada() {
+        return horaChegada;
     }
 
     //set tempo de chegada esperado
-    public void setTempoChegada(LocalDateTime tempoChegada) {
-        this.tempoChegada = tempoChegada;
+    public void setHoraChegada(LocalDateTime horaChegada) {
+        this.horaChegada = horaChegada;
     }
 
     //verificar se a encomenda ja chegou ao cliente
@@ -84,10 +85,12 @@ public class Movimento {
 
     @Override
     public String toString() {
+        DateTimeFormatter customFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");;
+        String formattedString = horaChegada.format(customFormat);
         if (recebido == true) {
-            return "Encomenda n. " + idEncomenda + " feita por " + to + " ao fornecedor " + from + ": " + current + " Recebida";
+            return "Encomenda n. " + idEncomenda + " feita por " + to + " ao fornecedor " + from + ": " + current + " Recebida" + " " + formattedString;
         } else {
-            return "Encomenda n. " + idEncomenda + " feita por " + to + " ao fornecedor " + from + ": " + current;
+            return "Encomenda n. " + idEncomenda + " feita por " + to + " ao fornecedor " + from + ": " + current + " " + formattedString;
         }
     }
 }

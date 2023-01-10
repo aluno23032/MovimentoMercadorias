@@ -308,7 +308,7 @@ public class GUI_Distribuidor extends javax.swing.JFrame {
         try {
             
             //adicionar encomendas do user ao model
-            model2.addAll(miner.getBlockChain().getUserEncomendas(user));
+            model2.addAll(miner.getBlockChain().getUserEncomendas(user, "d"));
             
         } catch (RemoteException ex) {
             Logger.getLogger(GUI_Distribuidor.class.getName()).log(Level.SEVERE, null, ex);

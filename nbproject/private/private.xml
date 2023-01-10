@@ -3,10 +3,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/account/Register_Distribuidor.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/MiningListener.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/MerkleTree.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/MinerThread.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/blockChain/p2p/miner/ListenerRemoteMiner.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/RMI.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/account/Register_Utilizador.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/trackingEncomendas/Movimento.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/blockChain/p2p/miner/InterfaceRemoteMiner.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/Serializer.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/account/Register_Distribuidor.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/trackingEncomendas/GUI_Utilizador.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/Block.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/BlockChain.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/SecurityUtils.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/blockChain/p2p/gui/Remote_MinerBlockChain.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/trackingEncomendas/GUI_Distribuidor.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/account/Login.java</file>
+            <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/GuiUtils.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/utils/Miner.java</file>
             <file>file:/C:/Users/Eduardo/Documents/NetBeansProjects/TrackingEncomendas/src/blockChain/p2p/miner/ObjectRemoteMiner.java</file>
         </group>

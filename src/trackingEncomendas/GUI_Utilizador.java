@@ -192,7 +192,7 @@ public class GUI_Utilizador extends javax.swing.JFrame {
         try {
             
             //adicionar as encomendas do user ao model
-            model2.addAll(miner.getBlockChain().getUserEncomendas(user));
+            model2.addAll(miner.getBlockChain().getUserEncomendas(user, "u"));
             
         } catch (RemoteException ex) {
         }
